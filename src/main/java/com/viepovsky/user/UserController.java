@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-    private final UserService userService;
+    private final UserService service;
+    private final UserMapper mapper;
 
     @GetMapping
-    ResponseEntity<User> getUserByUserLogin(@RequestParam(name = "login") @NotBlank String login) {
+    ResponseEntity<UserForLoginDTO> getUserByUserLogin(@RequestParam(name = "login") @NotBlank String login) {
         logger.info("getUserByUserLogin endpoint used with login value: " + login);
-        return ResponseEntity.ok(userService.findUserByLogin(login));
+        User user = service.findUserByLogin(login);
+        return ResponseEntity.ok(mapper.mapUserToUserForLoginDTO(user));
     }
 }

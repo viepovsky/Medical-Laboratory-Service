@@ -2,6 +2,8 @@ package com.viepovsky.user;
 
 import com.viepovsky.diagnostic.DiagnosticResult;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,9 +24,11 @@ public class User {
 
     private String login;
 
+    @NotBlank
     @Column(name = "pesel")
     private String personalId;
 
+    @Pattern(regexp = "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\W])(?=\\S+$).{8,}", message = "Password should contain at least 8 characters, one uppercase letter, one lowercase letter, and one special character.")
     private String password;
 
     private String email;

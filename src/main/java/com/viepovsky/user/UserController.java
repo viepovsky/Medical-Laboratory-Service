@@ -5,12 +5,13 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+
 @RestController
-@RequestMapping(path = "/medical/user")
+@RequestMapping(path = "/medical/users")
 @RequiredArgsConstructor
 class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -18,16 +19,16 @@ class UserController {
     private final UserMapper mapper;
 
     @GetMapping
-    ResponseEntity<UserForLoginDTO> getUserByUserLogin(@RequestParam(name = "login") @NotBlank String login) {
+    ResponseEntity<UserDTO> getUserByUserLogin(@RequestParam(name = "login") @NotBlank String login) {
         logger.info("getUserByUserLogin endpoint used with login value: " + login);
         User user = service.findUserByLogin(login);
-        return ResponseEntity.ok(mapper.mapUserToUserForLoginDTO(user));
+        return ResponseEntity.ok(mapper.mapUserToUserDtoForLogin(user));
     }
     @PostMapping
-    ResponseEntity<Void> createUser(@RequestBody @Valid UserDTO userDTO) {
-        User user = mapper.mapUserDtoToUser(userDTO);
-        service.createUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    ResponseEntity<UserDTO> createUser(@RequestBody @Valid UserDTO userDTO) {
+        User toSave = mapper.mapUserDtoToUser(userDTO);
+        UserDTO result = mapper.mapUserToCreatedUserDto(service.createUser(toSave));
+        return  ResponseEntity.created(URI.create("/medical/users?login=" + result.getLogin())).body(result);
     }
 
     @PutMapping

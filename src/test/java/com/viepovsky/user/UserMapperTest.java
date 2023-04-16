@@ -14,7 +14,7 @@ class UserMapperTest {
         //Given
         var user = User.builder().login("testLogin").password("testPassword").role(UserRole.USER).build();
         //When
-        var expectedUserDTO = userMapper.mapUserToUserForLoginDTO(user);
+        var expectedUserDTO = userMapper.mapUserToUserDtoForLogin(user);
         //Then
         assertThat(expectedUserDTO).isNotNull();
         assertEquals(user.getLogin(), expectedUserDTO.getLogin());

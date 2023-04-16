@@ -11,6 +11,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 class UserDTO {
+    private Long id;
+
     @NotBlank(message = "Login must not be empty")
     private String login;
 
@@ -30,4 +32,17 @@ class UserDTO {
     private String lastName;
 
     private String phoneNumber;
+
+    private UserRole role;
+
+    public UserDTO(Long id, String login) {
+        this.id = id;
+        this.login = login;
+    }
+
+    public UserDTO(String login, String password, UserRole role) {
+        this.login = login;
+        this.password = password;
+        this.role = role;
+    }
 }

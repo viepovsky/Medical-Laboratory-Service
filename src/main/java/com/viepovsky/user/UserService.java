@@ -1,5 +1,6 @@
 package com.viepovsky.user;
 
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,8 +14,11 @@ class UserService {
         return repository.findUserByLogin(login).orElseThrow(() -> new EntityNotFoundException("User with login: " + login + " does not exist in database."));
     }
 
-    void createUser(User user) {
-        repository.save(user);
+    User createUser(User user) {
+        if (repository.existsByLogin(user.getLogin())){
+            throw new EntityExistsException("User with login: " + user.getLogin() + " already exists in database.");
+        }
+        return repository.save(user);
     }
 
     void updateUser(User user) {

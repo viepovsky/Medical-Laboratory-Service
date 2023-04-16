@@ -12,15 +12,15 @@ class UserMapper {
         );
     }
 
-    User mapUserCreationDtoToUser(UserCreationDTO userCreationDTO) {
+    User mapUserDtoToUser(UserDTO userDTO) {
         return new User(
-                userCreationDTO.getLogin(),
-                userCreationDTO.getPersonalId(),
-                userCreationDTO.getPassword(),
-                userCreationDTO.getEmail(),
-                userCreationDTO.getName(),
-                userCreationDTO.getLastName(),
-                userCreationDTO.getPhoneNumber()
+                userDTO.getLogin(),
+                userDTO.getPersonalId(),
+                userDTO.getPassword(),
+                userDTO.getEmail(),
+                userDTO.getName(),
+                userDTO.getLastName(),
+                userDTO.getPhoneNumber()
         );
     }
 }

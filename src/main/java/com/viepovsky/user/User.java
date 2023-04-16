@@ -2,18 +2,14 @@ package com.viepovsky.user;
 
 import com.viepovsky.diagnostic.DiagnosticResult;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,11 +22,9 @@ public class User {
 
     private String login;
 
-    @NotBlank
     @Column(name = "pesel")
     private String personalId;
-// TODO: This password should be already encrypted so Validation shouldn't be here, I will change it later
-    @Pattern(regexp = "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\W])(?=\\S+$).{8,}", message = "Password should contain at least 8 characters, one uppercase letter, one lowercase letter, and one special character.")
+
     private String password;
 
     private String email;
@@ -57,11 +51,7 @@ public class User {
     private List<DiagnosticResult> resultsList = new ArrayList<>();
 
     public User(String login, String personalId, String password, String email, String name, String lastName, String phoneNumber) {
-        if (login.isEmpty()) {
-            this.login = personalId;
-        } else {
-            this.login = login;
-        }
+        this.login = login;
         this.personalId = personalId;
         this.password = password;
         this.email = email;

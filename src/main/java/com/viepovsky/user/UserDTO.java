@@ -10,7 +10,8 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-class UserCreationDTO {
+class UserDTO {
+    @NotBlank(message = "Login must not be empty")
     private String login;
 
     @NotBlank(message = "Personal Id must not be empty")

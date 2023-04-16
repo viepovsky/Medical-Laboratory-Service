@@ -29,7 +29,7 @@ public class User {
     @NotBlank
     @Column(name = "pesel")
     private String personalId;
-
+// TODO: This password should be already encrypted so Validation shouldn't be here, I will change it later
     @Pattern(regexp = "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\W])(?=\\S+$).{8,}", message = "Password should contain at least 8 characters, one uppercase letter, one lowercase letter, and one special character.")
     private String password;
 
@@ -55,4 +55,20 @@ public class User {
             fetch = FetchType.LAZY
     )
     private List<DiagnosticResult> resultsList = new ArrayList<>();
+
+    public User(String login, String personalId, String password, String email, String name, String lastName, String phoneNumber) {
+        if (login.isEmpty()) {
+            this.login = personalId;
+        } else {
+            this.login = login;
+        }
+        this.personalId = personalId;
+        this.password = password;
+        this.email = email;
+        this.name = name;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.role = UserRole.USER;
+        this.createdDate = LocalDateTime.now();
+    }
 }

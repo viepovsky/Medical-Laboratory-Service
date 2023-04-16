@@ -11,4 +11,16 @@ class UserMapper {
                 user.getRole()
         );
     }
+
+    User mapUserCreationDtoToUser(UserCreationDTO userCreationDTO) {
+        return new User(
+                userCreationDTO.getLogin(),
+                userCreationDTO.getPersonalId(),
+                userCreationDTO.getPassword(),
+                userCreationDTO.getEmail(),
+                userCreationDTO.getName(),
+                userCreationDTO.getLastName(),
+                userCreationDTO.getPhoneNumber()
+        );
+    }
 }

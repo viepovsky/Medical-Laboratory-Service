@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
@@ -28,7 +27,7 @@ class UserServiceTest {
     @Test
     void should_find_and_return_user_for_login_purposes() {
         //Given
-        var expectedUser = Mockito.mock(User.class);
+        var expectedUser = User.builder().login("testLogin").password("testPassword").role(UserRole.USER).build();
         when(repository.findUserByLogin(anyString())).thenReturn(Optional.of(expectedUser));
         //When
         var retrievedUser = service.findUserByLogin(anyString());

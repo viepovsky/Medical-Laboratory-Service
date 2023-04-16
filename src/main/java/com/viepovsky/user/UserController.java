@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -13,6 +14,7 @@ import java.net.URI;
 @RestController
 @RequestMapping(path = "/medical/users")
 @RequiredArgsConstructor
+@Validated
 class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService service;

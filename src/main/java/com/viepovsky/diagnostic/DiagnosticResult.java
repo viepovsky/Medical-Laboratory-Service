@@ -19,10 +19,9 @@ public class DiagnosticResult {
     @GeneratedValue
     private Long id;
 
-    private DiagnosticType typeName;
+    private DiagnosticType type;
 
-    @Column(name = "registration_date")
-    private LocalDateTime registrationDate;
+    private LocalDateTime registration;
 
     @Lob
     private byte[] resultsPdf;
@@ -31,9 +30,9 @@ public class DiagnosticResult {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public DiagnosticResult(DiagnosticType typeName, byte[] resultsPdf) {
-        this.typeName = typeName;
+    public DiagnosticResult(DiagnosticType type, byte[] resultsPdf) {
+        this.type = type;
         this.resultsPdf = resultsPdf;
-        registrationDate = LocalDateTime.now();
+        registration = LocalDateTime.now();
     }
 }

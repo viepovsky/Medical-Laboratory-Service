@@ -20,22 +20,22 @@ class DiagnosticResultMapperTest {
     void should_map_DiagnosticResult_to_DiagnosticResultDTO() {
         //Given
         var user = User.builder().login("test").build();
-        var result = DiagnosticResult.builder().typeName(DiagnosticType.BLOOD)
-                .registrationDate(LocalDateTime.now()).user(user).build();
+        var result = DiagnosticResult.builder().type(DiagnosticType.BLOOD)
+                .registration(LocalDateTime.now()).user(user).build();
         //When
         var retrievedResultDTO = mapper.mapToDiagnosticResultDto(result);
         //Then
         assertThat(retrievedResultDTO).isNotNull();
-        assertEquals(result.getTypeName(), retrievedResultDTO.getTypeName());
-        assertEquals(result.getRegistrationDate(), retrievedResultDTO.getRegistrationDate());
+        assertEquals(result.getType(), retrievedResultDTO.getType());
+        assertEquals(result.getRegistration(), retrievedResultDTO.getRegistration());
     }
 
     @Test
     void should_map_DiagnosticResult_list_to_DiagnosticResultDTO_list() {
         //Given
         var user = User.builder().login("test").build();
-        var result = DiagnosticResult.builder().typeName(DiagnosticType.BLOOD)
-                .registrationDate(LocalDateTime.now()).user(user).build();
+        var result = DiagnosticResult.builder().type(DiagnosticType.BLOOD)
+                .registration(LocalDateTime.now()).user(user).build();
         List<DiagnosticResult> results = new ArrayList<>(List.of(result));
         //When
         List<DiagnosticResultDTO> retrievedResultsDto = mapper.mapToDiagnosticResultDtoList(results);
@@ -47,12 +47,12 @@ class DiagnosticResultMapperTest {
     @Test
     void should_map_DiagnosticResultDTO_to_DiagnosticResult() {
         //Given
-        var resultDTO = DiagnosticResultDTO.builder().typeName(DiagnosticType.BLOOD)
-                .registrationDate(LocalDateTime.now()).build();
+        var resultDTO = DiagnosticResultDTO.builder().type(DiagnosticType.BLOOD)
+                .registration(LocalDateTime.now()).build();
         //When
         var retrievedResult = mapper.mapToDiagnosticResult(resultDTO);
         //Then
         assertThat(retrievedResult).isNotNull();
-        assertEquals(resultDTO.getTypeName(), retrievedResult.getTypeName());
+        assertEquals(resultDTO.getType(), retrievedResult.getType());
     }
 }

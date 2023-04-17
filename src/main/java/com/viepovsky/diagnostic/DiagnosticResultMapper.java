@@ -9,8 +9,8 @@ class DiagnosticResultMapper {
     DiagnosticResultDTO mapToDiagnosticResultDto(DiagnosticResult result) {
         return new DiagnosticResultDTO(
                 result.getId(),
-                result.getTypeName(),
-                result.getRegistrationDate(),
+                result.getType(),
+                result.getRegistration(),
                 result.getResultsPdf(),
                 result.getUser().getLogin()
         );
@@ -24,7 +24,7 @@ class DiagnosticResultMapper {
 
     DiagnosticResult mapToDiagnosticResult(DiagnosticResultDTO resultDTO) {
         return new DiagnosticResult(
-                resultDTO.getTypeName(),
+                resultDTO.getType(),
                 resultDTO.getResultsPdf()
         );
     }

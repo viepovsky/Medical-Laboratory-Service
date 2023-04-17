@@ -25,8 +25,8 @@ class DiagnosticResultService {
             throw new EntityNotFoundException("User with login: " + login + " does not exist in database.");
         }
         User user = userRepository.findUserByLogin(login).get();
-        user.getResultsList().add(result);
         result.setUser(user);
+        user.getResultsList().add(result);
         userRepository.save(user);
         return resultRepository.save(result);
     }

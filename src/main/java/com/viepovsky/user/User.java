@@ -45,7 +45,6 @@ public class User {
     @OneToMany(
             targetEntity = DiagnosticResult.class,
             mappedBy = "user",
-            cascade = CascadeType.ALL,
             fetch = FetchType.LAZY
     )
     private List<DiagnosticResult> resultsList = new ArrayList<>();

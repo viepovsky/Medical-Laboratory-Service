@@ -24,19 +24,19 @@ class UserController {
     ResponseEntity<UserDTO> getUserByUserLogin(@RequestParam(name = "login") @NotBlank String login) {
         logger.info("getUserByUserLogin endpoint used with login value: " + login);
         User user = service.findUserByLogin(login);
-        return ResponseEntity.ok(mapper.mapUserToUserDtoForLogin(user));
+        return ResponseEntity.ok(mapper.mapToUserDtoForLogin(user));
     }
     @PostMapping
     ResponseEntity<UserDTO> createUser(@RequestBody @Valid UserDTO userDTO) {
         logger.info("createUser endpoint used with body: " + userDTO.toString());
-        User toSave = mapper.mapUserDtoToUser(userDTO);
-        UserDTO result = mapper.mapUserToCreatedUserDto(service.createUser(toSave));
+        User toSave = mapper.mapToUser(userDTO);
+        UserDTO result = mapper.mapToCreatedUserDto(service.createUser(toSave));
         return  ResponseEntity.created(URI.create("/medical/users?login=" + result.getLogin())).body(result);
     }
 
     @PutMapping
     ResponseEntity<Void> updateUser(@RequestBody @Valid UserDTO userDTO) {
-        User user = mapper.mapUserDtoToUser(userDTO);
+        User user = mapper.mapToUser(userDTO);
         service.updateUser(user);
         return ResponseEntity.noContent().build();
     }

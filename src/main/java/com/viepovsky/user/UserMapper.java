@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 class UserMapper {
-    UserDTO mapUserToUserDtoForLogin(User user) {
+    UserDTO mapToUserDtoForLogin(User user) {
         return new UserDTO(
                 user.getLogin(),
                 user.getPassword(),
@@ -12,7 +12,7 @@ class UserMapper {
         );
     }
 
-    User mapUserDtoToUser(UserDTO userDTO) {
+    User mapToUser(UserDTO userDTO) {
         return new User(
                 userDTO.getLogin(),
                 userDTO.getPersonalId(),
@@ -24,7 +24,7 @@ class UserMapper {
         );
     }
 
-    UserDTO mapUserToCreatedUserDto(User user) {
+    UserDTO mapToCreatedUserDto(User user) {
         return new UserDTO(
                 user.getId(),
                 user.getLogin());

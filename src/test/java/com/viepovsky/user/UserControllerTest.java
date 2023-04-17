@@ -35,11 +35,11 @@ class UserControllerTest {
         var expectedJson = new ObjectMapper().writeValueAsString(expectedUser);
 
         when(service.findUserByLogin(anyString())).thenReturn(Mockito.mock(User.class));
-        when(mapper.mapUserToUserDtoForLogin(any(User.class))).thenReturn(expectedUser);
+        when(mapper.mapToUserDtoForLogin(any(User.class))).thenReturn(expectedUser);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/medical/users")
-                        .param("login", anyString()))
+                        .param("login", "someString"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json(expectedJson));
     }

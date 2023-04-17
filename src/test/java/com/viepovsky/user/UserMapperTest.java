@@ -8,18 +8,18 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class UserMapperTest {
-    private final UserMapper userMapper = new UserMapper();
+    private final UserMapper mapper = new UserMapper();
     @Test
     void should_map_User_to_UserDTO_for_login() {
         //Given
         var user = User.builder().login("testLogin").password("testPassword").role(UserRole.USER).build();
         //When
-        var expectedUserDTO = userMapper.mapToUserDtoForLogin(user);
+        var retrievedUserDTO = mapper.mapToUserDtoForLogin(user);
         //Then
-        assertThat(expectedUserDTO).isNotNull();
-        assertEquals(user.getLogin(), expectedUserDTO.getLogin());
-        assertEquals(user.getPassword(), expectedUserDTO.getPassword());
-        assertEquals(user.getRole(), expectedUserDTO.getRole());
+        assertThat(retrievedUserDTO).isNotNull();
+        assertEquals(user.getLogin(), retrievedUserDTO.getLogin());
+        assertEquals(user.getPassword(), retrievedUserDTO.getPassword());
+        assertEquals(user.getRole(), retrievedUserDTO.getRole());
     }
 
     @Test
@@ -28,23 +28,23 @@ class UserMapperTest {
         var userDTO = UserDTO.builder().login("testLogin").personalId("testId").password("testPassword")
                 .email("test@Email.com").name("testName").lastName("lastName").phoneNumber("testNumber").build();
         //When
-        var expectedUser = userMapper.mapToUser(userDTO);
+        var retrievedUser = mapper.mapToUser(userDTO);
         //Then
-        assertThat(expectedUser).isNotNull();
-        assertEquals(userDTO.getLogin(), expectedUser.getLogin());
-        assertEquals(userDTO.getEmail(), expectedUser.getEmail());
-        assertEquals(userDTO.getPhoneNumber(), expectedUser.getPhoneNumber());
+        assertThat(retrievedUser).isNotNull();
+        assertEquals(userDTO.getLogin(), retrievedUser.getLogin());
+        assertEquals(userDTO.getEmail(), retrievedUser.getEmail());
+        assertEquals(userDTO.getPhoneNumber(), retrievedUser.getPhoneNumber());
     }
 
     @Test
-    void should_map_User_to_created_UserDTO() {
+    void should_map_User_to_UserDTO_for_creating_user_account() {
         //Given
         var user = User.builder().login("testLogin").id(52L).build();
         //When
-        var expectedUserDTO = userMapper.mapToCreatedUserDto(user);
+        var retrievedUserDTO = mapper.mapToCreatedUserDto(user);
         //Then
-        assertThat(expectedUserDTO).isNotNull();
-        assertEquals(user.getLogin(), expectedUserDTO.getLogin());
-        assertEquals(user.getId(), expectedUserDTO.getId());
+        assertThat(retrievedUserDTO).isNotNull();
+        assertEquals(user.getLogin(), retrievedUserDTO.getLogin());
+        assertEquals(user.getId(), retrievedUserDTO.getId());
     }
 }

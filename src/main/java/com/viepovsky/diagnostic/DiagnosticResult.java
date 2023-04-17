@@ -2,15 +2,13 @@ package com.viepovsky.diagnostic;
 
 import com.viepovsky.user.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -27,15 +25,15 @@ public class DiagnosticResult {
     private LocalDateTime registrationDate;
 
     @Lob
-    private byte[] pdfResults;
+    private byte[] resultsPdf;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 
-    public DiagnosticResult(DiagnosticType typeName, byte[] pdfResults) {
+    public DiagnosticResult(DiagnosticType typeName, byte[] resultsPdf) {
         this.typeName = typeName;
-        this.pdfResults = pdfResults;
+        this.resultsPdf = resultsPdf;
         registrationDate = LocalDateTime.now();
     }
 }

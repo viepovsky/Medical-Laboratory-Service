@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 class UserService {
     private final UserRepository repository;
 
-    User findUserByLogin(String login) {
+    User getUserByLogin(String login) {
         return repository.findUserByLogin(login).orElseThrow(() -> new EntityNotFoundException("User with login: " + login + " does not exist in database."));
     }
 

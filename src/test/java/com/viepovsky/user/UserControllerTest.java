@@ -34,7 +34,7 @@ class UserControllerTest {
         var expectedUser = new UserDTO("testLogin", "testPassword", UserRole.USER);
         var expectedJson = new ObjectMapper().writeValueAsString(expectedUser);
 
-        when(service.findUserByLogin(anyString())).thenReturn(Mockito.mock(User.class));
+        when(service.getUserByLogin(anyString())).thenReturn(Mockito.mock(User.class));
         when(mapper.mapToUserDtoForLogin(any(User.class))).thenReturn(expectedUser);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders

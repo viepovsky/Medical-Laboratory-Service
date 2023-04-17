@@ -23,7 +23,7 @@ class UserController {
     @GetMapping
     ResponseEntity<UserDTO> getUserByUserLogin(@RequestParam(name = "login") @NotBlank String login) {
         logger.info("getUserByUserLogin endpoint used with login value: " + login);
-        User user = service.findUserByLogin(login);
+        User user = service.getUserByLogin(login);
         return ResponseEntity.ok(mapper.mapToUserDtoForLogin(user));
     }
     @PostMapping

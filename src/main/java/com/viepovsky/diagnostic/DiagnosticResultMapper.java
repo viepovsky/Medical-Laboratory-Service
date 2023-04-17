@@ -6,7 +6,7 @@ import java.util.List;
 
 @Service
 class DiagnosticResultMapper {
-    DiagnosticResultDTO mapDiagnosticResultToDiagnosticResultDto(DiagnosticResult result) {
+    DiagnosticResultDTO mapToDiagnosticResultDto(DiagnosticResult result) {
         return new DiagnosticResultDTO(
                 result.getId(),
                 result.getTypeName(),
@@ -16,9 +16,16 @@ class DiagnosticResultMapper {
         );
     }
 
-    List<DiagnosticResultDTO> mapDiagnosticResultListToDiagnosticResultDtoList(List<DiagnosticResult> results) {
+    List<DiagnosticResultDTO> mapToDiagnosticResultDtoList(List<DiagnosticResult> results) {
         return results.stream()
-                .map(this::mapDiagnosticResultToDiagnosticResultDto)
+                .map(this::mapToDiagnosticResultDto)
                 .toList();
+    }
+
+    DiagnosticResult mapToDiagnosticResult(DiagnosticResultDTO resultDTO) {
+        return new DiagnosticResult(
+                resultDTO.getTypeName(),
+                resultDTO.getPdfResults()
+        );
     }
 }

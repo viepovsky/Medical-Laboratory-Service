@@ -28,6 +28,7 @@ class UserController {
     }
     @PostMapping
     ResponseEntity<UserDTO> createUser(@RequestBody @Valid UserDTO userDTO) {
+        logger.info("createUser endpoint used with body: " + userDTO.toString());
         User toSave = mapper.mapUserDtoToUser(userDTO);
         UserDTO result = mapper.mapUserToCreatedUserDto(service.createUser(toSave));
         return  ResponseEntity.created(URI.create("/medical/users?login=" + result.getLogin())).body(result);

@@ -58,7 +58,7 @@ public class User {
         this.name = name;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
-        this.role = UserRole.USER;
-        this.createdDate = LocalDateTime.now();
+        role = UserRole.USER;
+        createdDate = LocalDateTime.now();
     }
 }

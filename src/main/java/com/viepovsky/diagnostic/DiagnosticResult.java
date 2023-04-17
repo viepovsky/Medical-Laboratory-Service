@@ -5,10 +5,12 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -30,4 +32,10 @@ public class DiagnosticResult {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public DiagnosticResult(DiagnosticType typeName, byte[] pdfResults) {
+        this.typeName = typeName;
+        this.pdfResults = pdfResults;
+        registrationDate = LocalDateTime.now();
+    }
 }

@@ -1,5 +1,7 @@
 package com.viepovsky.diagnostic;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,11 +15,14 @@ import java.time.LocalDateTime;
 class DiagnosticResultDTO {
     private Long id;
 
+    @NotNull
     private DiagnosticType typeName;
 
     private LocalDateTime registrationDate;
 
+    @NotNull
     private byte[] pdfResults;
 
+    @NotBlank
     private String userLogin;
 }

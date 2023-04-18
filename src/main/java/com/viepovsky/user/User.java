@@ -7,6 +7,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -57,7 +58,27 @@ public class User {
         this.name = name;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
-        role = UserRole.USER;
+    }
+
+    void updateFrom(User user){
+        login = Optional.ofNullable(user.getLogin()).orElse(login);
+        personalId = Optional.ofNullable(user.getPersonalId()).orElse(personalId);
+        password = Optional.ofNullable(user.getPassword()).orElse(password);
+        email = Optional.ofNullable(user.getEmail()).orElse(email);
+        name = Optional.ofNullable(user.getName()).orElse(name);
+        lastName = Optional.ofNullable(user.getLastName()).orElse(lastName);
+        phoneNumber = Optional.ofNullable(user.getPhoneNumber()).orElse(phoneNumber);
+    }
+    @PrePersist
+    void prePersist() {
+        if (role == null) {
+            role = UserRole.USER;
+        }
         createdOn = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    void preUpdate() {
+        updatedOn = LocalDateTime.now();
     }
 }

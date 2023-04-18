@@ -40,7 +40,7 @@ class UserDTO {
 
     private UserRole role;
 
-    private LocalDateTime created;
+    private LocalDateTime createdOn;
 
     public UserDTO(Long id, String login) {
         this.id = id;

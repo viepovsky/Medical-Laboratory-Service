@@ -1,0 +1,1 @@
+-- This file is just to init flyway_schema_history table -> in properties spring.flyway.baselineOnMigrate=true

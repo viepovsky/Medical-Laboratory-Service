@@ -1,6 +1,7 @@
 package com.viepovsky.diagnostic;
 
 import com.viepovsky.user.User;
+import com.viepovsky.utilities.BaseEntityAudit;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "DIAGNOSTIC_RESULTS")
-public class DiagnosticResult {
+public class DiagnosticResult extends BaseEntityAudit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "results_seq")
@@ -31,22 +32,8 @@ public class DiagnosticResult {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private LocalDateTime createdOn;
-
-    private LocalDateTime updatedOn;
-
     public DiagnosticResult(DiagnosticType type, byte[] resultsPdf) {
         this.type = type;
         this.resultsPdf = resultsPdf;
-    }
-
-    @PrePersist
-    void prePersist() {
-        createdOn = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    void preUpdate() {
-        updatedOn = LocalDateTime.now();
     }
 }

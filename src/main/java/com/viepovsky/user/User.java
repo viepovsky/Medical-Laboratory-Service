@@ -1,10 +1,10 @@
 package com.viepovsky.user;
 
 import com.viepovsky.diagnostic.DiagnosticResult;
+import com.viepovsky.utilities.BaseEntityAudit;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +16,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @Entity
 @Table(name = "USERS")
-public class User {
+public class User extends BaseEntityAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_seq")
     @SequenceGenerator(name = "users_seq", initialValue = 500, allocationSize = 1)
@@ -38,10 +38,6 @@ public class User {
     private String phoneNumber;
 
     private UserRole role;
-
-    private LocalDateTime createdOn;
-
-    private LocalDateTime updatedOn;
 
     @OneToMany(
             targetEntity = DiagnosticResult.class,
@@ -70,16 +66,11 @@ public class User {
         phoneNumber = Optional.ofNullable(user.getPhoneNumber()).orElse(phoneNumber);
     }
 
-    @PrePersist
-    void prePersist() {
+    @Override
+    public void prePersist() {
         if (role == null) {
             role = UserRole.USER;
         }
-        createdOn = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    void preUpdate() {
-        updatedOn = LocalDateTime.now();
+        super.prePersist();
     }
 }

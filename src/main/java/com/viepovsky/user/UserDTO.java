@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Builder
@@ -37,6 +39,8 @@ class UserDTO {
     private String phoneNumber;
 
     private UserRole role;
+
+    private LocalDateTime created;
 
     public UserDTO(Long id, String login) {
         this.id = id;

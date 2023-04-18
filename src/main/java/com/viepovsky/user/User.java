@@ -17,7 +17,7 @@ import java.util.List;
 @Table(name = "USERS")
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String login;
@@ -39,8 +39,7 @@ public class User {
 
     private UserRole role;
 
-    @Column(name = "created_date")
-    private LocalDateTime createdDate;
+    private LocalDateTime created;
 
     @OneToMany(
             targetEntity = DiagnosticResult.class,
@@ -58,6 +57,6 @@ public class User {
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         role = UserRole.USER;
-        createdDate = LocalDateTime.now();
+        created = LocalDateTime.now();
     }
 }

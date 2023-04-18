@@ -1,6 +1,5 @@
 package com.viepovsky.diagnostic;
 
-import com.viepovsky.user.User;
 import com.viepovsky.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

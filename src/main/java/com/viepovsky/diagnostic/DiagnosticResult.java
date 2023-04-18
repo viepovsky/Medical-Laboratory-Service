@@ -17,7 +17,7 @@ public class DiagnosticResult {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "results_seq")
-    @SequenceGenerator(name="results_seq", initialValue=500, allocationSize = 1)
+    @SequenceGenerator(name = "results_seq", initialValue = 500, allocationSize = 1)
     private Long id;
 
     private DiagnosticType type;
@@ -38,6 +38,15 @@ public class DiagnosticResult {
     public DiagnosticResult(DiagnosticType type, byte[] resultsPdf) {
         this.type = type;
         this.resultsPdf = resultsPdf;
-        registration = LocalDateTime.now();
+    }
+
+    @PrePersist
+    void prePersist() {
+        createdOn = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    void preUpdate() {
+        updatedOn = LocalDateTime.now();
     }
 }

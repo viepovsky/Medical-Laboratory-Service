@@ -19,7 +19,7 @@ import java.util.Optional;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_seq")
-    @SequenceGenerator(name="users_seq", initialValue=500, allocationSize = 1)
+    @SequenceGenerator(name = "users_seq", initialValue = 500, allocationSize = 1)
     private Long id;
 
     private String login;
@@ -60,7 +60,7 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    void updateFrom(User user){
+    void updateFrom(User user) {
         login = Optional.ofNullable(user.getLogin()).orElse(login);
         personalId = Optional.ofNullable(user.getPersonalId()).orElse(personalId);
         password = Optional.ofNullable(user.getPassword()).orElse(password);
@@ -69,6 +69,7 @@ public class User {
         lastName = Optional.ofNullable(user.getLastName()).orElse(lastName);
         phoneNumber = Optional.ofNullable(user.getPhoneNumber()).orElse(phoneNumber);
     }
+
     @PrePersist
     void prePersist() {
         if (role == null) {

@@ -49,10 +49,10 @@ class UserControllerTest {
     @Test
     void should_create_user() throws Exception {
         //Given
-        var userDTO = UserDTO.builder().login("testLogin").personalId("9412").password("testPassword22@")
+        var userDTO = UserDTO.builder().login("testLogin").personalId("98062267819").password("testPassword22@")
                 .email("email@email.com").name("test").lastName("testlast").build();
         var json = new ObjectMapper().writeValueAsString(userDTO);
-        var user = User.builder().login("testLogin").personalId("9412").password("testPassword22@")
+        var user = User.builder().login("testLogin").personalId("98062267819").password("testPassword22@")
                 .email("email@email.com").name("test").lastName("testlast").build();
 
         when(mapper.mapToUser(any(UserDTO.class))).thenReturn(user);
@@ -85,10 +85,10 @@ class UserControllerTest {
     @Test
     void should_update_user() throws Exception {
         //Given
-        var userDTO = UserDTO.builder().login("testLogin").personalId("9412").password("testPassword22@")
+        var userDTO = UserDTO.builder().login("testLogin").personalId("98062267819").password("testPassword22@")
                 .email("email@email.com").name("test").lastName("testlast").build();
         var json = new ObjectMapper().writeValueAsString(userDTO);
-        var user = User.builder().login("testLogin").personalId("9412").password("testPassword22@")
+        var user = User.builder().login("testLogin").personalId("98062267819").password("testPassword22@")
                 .email("email@email.com").name("test").lastName("testlast").build();
 
         when(mapper.mapToUser(any(UserDTO.class))).thenReturn(user);

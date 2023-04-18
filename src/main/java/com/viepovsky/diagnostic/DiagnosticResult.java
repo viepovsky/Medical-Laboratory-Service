@@ -16,7 +16,8 @@ import java.time.LocalDateTime;
 public class DiagnosticResult {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "results_seq")
+    @SequenceGenerator(name="results_seq", initialValue=500, allocationSize = 1)
     private Long id;
 
     private DiagnosticType type;
@@ -29,6 +30,10 @@ public class DiagnosticResult {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
+
+    private LocalDateTime createdOn;
+
+    private LocalDateTime updatedOn;
 
     public DiagnosticResult(DiagnosticType type, byte[] resultsPdf) {
         this.type = type;

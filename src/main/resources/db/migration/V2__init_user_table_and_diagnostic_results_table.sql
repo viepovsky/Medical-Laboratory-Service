@@ -8,8 +8,7 @@ create table users(
     name varchar not null,
     last_name varchar not null,
     phone_number varchar,
-    role smallint,
-    created timestamp
+    role smallint
 );
 
 drop table if exists diagnostic_results CASCADE;

@@ -17,7 +17,8 @@ import java.util.List;
 @Table(name = "USERS")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_seq")
+    @SequenceGenerator(name="users_seq", initialValue=500, allocationSize = 1)
     private Long id;
 
     private String login;
@@ -31,15 +32,15 @@ public class User {
 
     private String name;
 
-    @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "phone_number")
     private String phoneNumber;
 
     private UserRole role;
 
-    private LocalDateTime created;
+    private LocalDateTime createdOn;
+
+    private LocalDateTime updatedOn;
 
     @OneToMany(
             targetEntity = DiagnosticResult.class,
@@ -57,6 +58,6 @@ public class User {
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         role = UserRole.USER;
-        created = LocalDateTime.now();
+        createdOn = LocalDateTime.now();
     }
 }

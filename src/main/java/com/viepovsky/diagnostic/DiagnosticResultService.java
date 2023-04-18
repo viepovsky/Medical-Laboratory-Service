@@ -21,13 +21,10 @@ class DiagnosticResultService {
     }
 
     DiagnosticResult saveDiagnosticResult(DiagnosticResult result, String login) {
-        if (!userRepository.existsByLogin(login)) {
-            throw new EntityNotFoundException("User with login: " + login + " does not exist in database.");
-        }
-        User user = userRepository.findUserByLogin(login).get();
-        result.setUser(user);
-        user.getResultsList().add(result);
-        userRepository.save(user);
+        var retrievedUser = userRepository.findUserByLogin(login).orElseThrow(() -> new EntityNotFoundException("User with login: " + login + " does not exist in database."));
+        result.setUser(retrievedUser);
+        retrievedUser.getResultsList().add(result);
+        userRepository.save(retrievedUser);
         return resultRepository.save(result);
     }
 }

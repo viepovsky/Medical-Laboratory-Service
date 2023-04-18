@@ -77,7 +77,6 @@ class UserServiceTest {
     void should_update_user() {
         //Given
         var user = User.builder().id(5L).login("testLogin").password("testPassword").role(UserRole.USER).build();
-        when(repository.existsByLogin(anyString())).thenReturn(true);
         when(repository.findUserByLogin(anyString())).thenReturn(Optional.of(user));
         when(repository.save(any(User.class))).thenReturn(user);
         //When
@@ -91,7 +90,7 @@ class UserServiceTest {
     void should_not_update_user_that_doesnt_exists() {
         //Given
         var user = User.builder().id(5L).login("testLogin").password("testPassword").role(UserRole.USER).build();
-        when(repository.existsByLogin(anyString())).thenReturn(false);
+        when(repository.findUserByLogin(anyString())).thenReturn(Optional.empty());
         //When & then
         assertThrows(EntityNotFoundException.class, () -> service.updateUser(user));
         verify(repository, times(0)).save(any(User.class));

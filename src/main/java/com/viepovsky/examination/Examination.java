@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -28,4 +29,12 @@ class Examination extends BaseEntityAudit {
     private String longDescription;
 
     private BigDecimal cost;
+
+    void updateFrom(Examination examination) {
+        name = Optional.ofNullable(examination.getName()).orElse(name);
+        type = Optional.ofNullable(examination.getType()).orElse(type);
+        shortDescription = Optional.ofNullable(examination.getShortDescription()).orElse(shortDescription);
+        longDescription = Optional.ofNullable(examination.getLongDescription()).orElse(longDescription);
+        cost = Optional.ofNullable(examination.getCost()).orElse(cost);
+    }
 }

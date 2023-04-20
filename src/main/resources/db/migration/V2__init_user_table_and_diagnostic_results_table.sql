@@ -18,5 +18,5 @@ create table diagnostic_results(
     registration timestamp,
     results_pdf oid,
     user_id bigint,
-    foreign key (id) references users (id)
+    foreign key (user_id) references users (id)
 );

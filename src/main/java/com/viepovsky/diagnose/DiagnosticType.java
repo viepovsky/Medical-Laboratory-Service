@@ -1,4 +1,4 @@
-package com.viepovsky.diagnostic;
+package com.viepovsky.diagnose;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

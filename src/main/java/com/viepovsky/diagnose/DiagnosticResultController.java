@@ -1,4 +1,4 @@
-package com.viepovsky.diagnostic;
+package com.viepovsky.diagnose;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;

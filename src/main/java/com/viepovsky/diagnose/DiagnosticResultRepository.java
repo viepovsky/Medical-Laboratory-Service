@@ -1,4 +1,4 @@
-package com.viepovsky.diagnostic;
+package com.viepovsky.diagnose;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

@@ -1,4 +1,4 @@
-package com.viepovsky.diagnostic;
+package com.viepovsky.diagnose;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayNameGeneration;

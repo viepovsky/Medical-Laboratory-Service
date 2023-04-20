@@ -1,4 +1,4 @@
-package com.viepovsky.diagnostic;
+package com.viepovsky.diagnose;
 
 import com.viepovsky.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;

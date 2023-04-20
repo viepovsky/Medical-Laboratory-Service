@@ -1,6 +1,6 @@
 package com.viepovsky.user;
 
-import com.viepovsky.diagnostic.DiagnosticResult;
+import com.viepovsky.diagnose.DiagnosticResult;
 import com.viepovsky.utilities.BaseEntityAudit;
 import jakarta.persistence.*;
 import lombok.*;

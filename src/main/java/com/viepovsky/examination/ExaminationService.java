@@ -20,7 +20,7 @@ class ExaminationService {
                 .orElseThrow(() -> new EntityNotFoundException("Examination with given id: " + id + " does not exist in database."));
     }
 
-    Examination createExamination(Examination examination) {
+    Examination saveExamination(Examination examination) {
         return repository.save(examination);
     }
 

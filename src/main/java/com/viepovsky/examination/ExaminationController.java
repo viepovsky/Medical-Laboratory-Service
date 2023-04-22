@@ -36,10 +36,10 @@ class ExaminationController {
     }
 
     @PostMapping
-    ResponseEntity<ExaminationDTO> createExamination(@RequestBody @Valid ExaminationDTO examinationDTO) {
+    ResponseEntity<ExaminationDTO> saveExamination(@RequestBody @Valid ExaminationDTO examinationDTO) {
         logger.info("createExamination endpoint used with body: " + examinationDTO.toString());
         Examination toSave = mapper.mapToExamination(examinationDTO);
-        ExaminationDTO saved = mapper.mapToExaminationDto(service.createExamination(toSave));
+        ExaminationDTO saved = mapper.mapToExaminationDto(service.saveExamination(toSave));
         return ResponseEntity.created(URI.create("/medical/examinations/" + saved.getId())).body(saved);
     }
 

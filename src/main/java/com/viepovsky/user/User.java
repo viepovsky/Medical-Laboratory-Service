@@ -4,8 +4,11 @@ import com.viepovsky.diagnose.DiagnosticResult;
 import com.viepovsky.utilities.BaseEntityAudit;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,7 +19,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @Entity
 @Table(name = "USERS")
-public class User extends BaseEntityAudit {
+public class User extends BaseEntityAudit implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_seq")
     @SequenceGenerator(name = "users_seq", initialValue = 500, allocationSize = 1)
@@ -37,7 +40,8 @@ public class User extends BaseEntityAudit {
 
     private String phoneNumber;
 
-    private UserRole role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @OneToMany(
             targetEntity = DiagnosticResult.class,
@@ -69,8 +73,38 @@ public class User extends BaseEntityAudit {
     @Override
     public void prePersist() {
         if (role == null) {
-            role = UserRole.USER;
+            role = Role.USER;
         }
         super.prePersist();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return null;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
     }
 }

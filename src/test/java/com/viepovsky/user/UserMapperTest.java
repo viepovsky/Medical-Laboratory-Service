@@ -12,7 +12,7 @@ class UserMapperTest {
     @Test
     void should_map_User_to_UserDTO_for_login() {
         //Given
-        var user = User.builder().login("testLogin").password("testPassword").role(UserRole.USER).build();
+        var user = User.builder().login("testLogin").password("testPassword").role(Role.USER).build();
         //When
         var retrievedUserDTO = mapper.mapToUserDtoForLogin(user);
         //Then

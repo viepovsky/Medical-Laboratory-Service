@@ -38,7 +38,7 @@ class UserDTO {
 
     private String phoneNumber;
 
-    private UserRole role;
+    private Role role;
 
     private LocalDateTime createdOn;
 
@@ -47,7 +47,7 @@ class UserDTO {
         this.login = login;
     }
 
-    public UserDTO(String login, String password, UserRole role) {
+    public UserDTO(String login, String password, Role role) {
         this.login = login;
         this.password = password;
         this.role = role;

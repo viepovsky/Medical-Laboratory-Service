@@ -33,7 +33,7 @@ class UserControllerTest {
     @Test
     void should_get_user_for_login_purposes() throws Exception {
         //Given
-        var user = new UserDTO("testLogin", "testPassword", UserRole.USER);
+        var user = new UserDTO("testLogin", "testPassword", Role.USER);
         var json = new ObjectMapper().writeValueAsString(user);
 
         when(service.getUserByLogin(anyString())).thenReturn(Mockito.mock(User.class));

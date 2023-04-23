@@ -1,0 +1,18 @@
+# DATABASE CONFIGURATION
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/medical
+    username: postgres
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+  flyway:
+    baseline-on-migrate: true
+
+# VALIDATION
+server:
+  error:
+    include-message: always
+#    include-binding-errors: always

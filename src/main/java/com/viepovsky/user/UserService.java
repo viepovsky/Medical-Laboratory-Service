@@ -11,7 +11,7 @@ class UserService {
     private final UserRepository repository;
 
     User getUserByLogin(String login) {
-        return repository.findUserByLogin(login).orElseThrow(() -> new EntityNotFoundException("User with login: " + login + " does not exist in database."));
+        return repository.findByLogin(login).orElseThrow(() -> new EntityNotFoundException("User with login: " + login + " does not exist in database."));
     }
 
     User createUser(User user) {
@@ -22,7 +22,7 @@ class UserService {
     }
 
     void updateUser(User user) {
-        var retrievedUser = repository.findUserByLogin(user.getLogin()).orElseThrow(() -> new EntityNotFoundException("User with login: " + user.getLogin() + " does not exist in database."));
+        var retrievedUser = repository.findByLogin(user.getLogin()).orElseThrow(() -> new EntityNotFoundException("User with login: " + user.getLogin() + " does not exist in database."));
         retrievedUser.updateFrom(user);
         repository.save(retrievedUser);
     }

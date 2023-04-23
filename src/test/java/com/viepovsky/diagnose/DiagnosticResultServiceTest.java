@@ -52,7 +52,7 @@ class DiagnosticResultServiceTest {
         //Given
         var result = DiagnosticResult.builder().type(DiagnosticType.BLOOD).build();
         var user = new User();
-        when(userRepository.findUserByLogin(anyString())).thenReturn(Optional.of(user));
+        when(userRepository.findByLogin(anyString())).thenReturn(Optional.of(user));
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(resultRepository.save(any(DiagnosticResult.class))).thenReturn(result);
         //When
@@ -66,7 +66,7 @@ class DiagnosticResultServiceTest {
     void should_not_save_DiagnosticResult_if_given_user_doesnt_exists() {
         //Given
         var result = DiagnosticResult.builder().type(DiagnosticType.BLOOD).build();
-        when(userRepository.findUserByLogin(anyString())).thenReturn(Optional.empty());
+        when(userRepository.findByLogin(anyString())).thenReturn(Optional.empty());
         //When & then
         assertThrows(EntityNotFoundException.class, () -> service.saveDiagnosticResult(result, "test"));
         verifyNoInteractions(resultRepository);

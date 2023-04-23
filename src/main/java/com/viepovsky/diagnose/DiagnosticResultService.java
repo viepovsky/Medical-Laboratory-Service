@@ -20,7 +20,7 @@ class DiagnosticResultService {
     }
 
     DiagnosticResult saveDiagnosticResult(DiagnosticResult result, String login) {
-        var retrievedUser = userRepository.findUserByLogin(login).orElseThrow(() -> new EntityNotFoundException("User with login: " + login + " does not exist in database."));
+        var retrievedUser = userRepository.findByLogin(login).orElseThrow(() -> new EntityNotFoundException("User with login: " + login + " does not exist in database."));
         result.setUser(retrievedUser);
         retrievedUser.getResultsList().add(result);
         userRepository.save(retrievedUser);

@@ -30,22 +30,22 @@ class UserServiceTest {
     void should_get_and_return_user() {
         //Given
         var expectedUser = User.builder().login("testLogin").password("testPassword").role(Role.USER).build();
-        when(repository.findUserByLogin(anyString())).thenReturn(Optional.of(expectedUser));
+        when(repository.findByLogin(anyString())).thenReturn(Optional.of(expectedUser));
         //When
         var retrievedUser = service.getUserByLogin("test");
         //Then
         assertThat(retrievedUser).usingRecursiveComparison().isEqualTo(expectedUser);
-        verify(repository, times(1)).findUserByLogin(anyString());
+        verify(repository, times(1)).findByLogin(anyString());
         verifyNoMoreInteractions(repository);
     }
 
     @Test
     void should_not_get_user_that_doesnt_exists() {
         //Given
-        when(repository.findUserByLogin(anyString())).thenReturn(Optional.empty());
+        when(repository.findByLogin(anyString())).thenReturn(Optional.empty());
         //When & then
         assertThrows(EntityNotFoundException.class, () -> service.getUserByLogin("test"));
-        verify(repository, times(1)).findUserByLogin(anyString());
+        verify(repository, times(1)).findByLogin(anyString());
         verifyNoMoreInteractions(repository);
     }
 
@@ -77,7 +77,7 @@ class UserServiceTest {
     void should_update_user() {
         //Given
         var user = User.builder().id(5L).login("testLogin").password("testPassword").role(Role.USER).build();
-        when(repository.findUserByLogin(anyString())).thenReturn(Optional.of(user));
+        when(repository.findByLogin(anyString())).thenReturn(Optional.of(user));
         when(repository.save(any(User.class))).thenReturn(user);
         //When
         service.updateUser(user);
@@ -90,7 +90,7 @@ class UserServiceTest {
     void should_not_update_user_that_doesnt_exists() {
         //Given
         var user = User.builder().id(5L).login("testLogin").password("testPassword").role(Role.USER).build();
-        when(repository.findUserByLogin(anyString())).thenReturn(Optional.empty());
+        when(repository.findByLogin(anyString())).thenReturn(Optional.empty());
         //When & then
         assertThrows(EntityNotFoundException.class, () -> service.updateUser(user));
         verify(repository, times(0)).save(any(User.class));

@@ -23,7 +23,7 @@ class SecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("")
+                .requestMatchers("/medical/auth/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

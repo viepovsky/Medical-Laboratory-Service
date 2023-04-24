@@ -14,7 +14,7 @@ public class UserService {
         return repository.findByLogin(login).orElseThrow(() -> new EntityNotFoundException("User with login: " + login + " does not exist in database."));
     }
 
-    User createUser(User user) {
+    public User createUser(User user) {
         if (repository.existsByLogin(user.getLogin())) {
             throw new EntityExistsException("User with login: " + user.getLogin() + " already exists in database.");
         }

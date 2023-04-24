@@ -1,5 +1,6 @@
 package com.viepovsky.user;
 
+import com.viepovsky.user.dto.UserDetailsResponseDTO;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -9,6 +10,18 @@ class UserMapper {
                 user.getLogin(),
                 user.getPassword(),
                 user.getRole()
+        );
+    }
+
+    UserDetailsResponseDTO mapToUserDetailsResponseDto(User user) {
+        return new UserDetailsResponseDTO(
+                user.getId(),
+                user.getLogin(),
+                user.getPersonalId(),
+                user.getEmail(),
+                user.getName(),
+                user.getLastName(),
+                user.getPhoneNumber()
         );
     }
 

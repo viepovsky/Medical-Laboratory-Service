@@ -1,5 +1,6 @@
 package com.viepovsky.user;
 
+import com.viepovsky.user.dto.UserDetailsResponseDTO;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +22,10 @@ class UserController {
     private final UserMapper mapper;
 
     @GetMapping
-    ResponseEntity<UserDTO> getUserByUserLogin(@RequestParam(name = "login") @NotBlank String login) {
-        logger.info("getUserByUserLogin endpoint used with login value: " + login);
-        User user = service.getUserByLogin(login);
-        return ResponseEntity.ok(mapper.mapToUserDtoForLogin(user));
+    ResponseEntity<UserDetailsResponseDTO> getUserByLogin(@RequestParam(name = "login") @NotBlank String login) {
+        logger.info("getUserByLogin endpoint used with login value: " + login);
+        var userDetails = mapper.mapToUserDetailsResponseDto(service.getUserByLogin(login));
+        return ResponseEntity.ok(userDetails);
     }
 
     @PostMapping

@@ -74,7 +74,7 @@ public class User extends BaseEntityAudit implements UserDetails {
     @Override
     public void prePersist() {
         if (role == null) {
-            role = Role.USER;
+            role = Role.ROLE_USER;
         }
         super.prePersist();
     }

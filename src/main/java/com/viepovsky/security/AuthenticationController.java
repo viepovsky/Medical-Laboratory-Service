@@ -1,8 +1,8 @@
 package com.viepovsky.security;
 
 
-import com.viepovsky.user.dto.AuthenticationUserRequest;
-import com.viepovsky.user.dto.RegisterUserRequest;
+import com.viepovsky.user.dto.request.AuthenticationUserRequest;
+import com.viepovsky.user.dto.request.RegisterUserRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

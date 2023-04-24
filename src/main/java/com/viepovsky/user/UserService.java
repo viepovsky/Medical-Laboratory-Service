@@ -1,8 +1,12 @@
 package com.viepovsky.user;
 
+import com.viepovsky.exceptions.PasswordValidationException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,5 +29,15 @@ public class UserService {
         var retrievedUser = repository.findByLogin(user.getLogin()).orElseThrow(() -> new EntityNotFoundException("User with login: " + user.getLogin() + " does not exist in database."));
         retrievedUser.updateFrom(user);
         repository.save(retrievedUser);
+    }
+
+    void updateUserWithPassword(User user) throws PasswordValidationException {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        if (user.getPassword().matches("(?=.*[a-z])(?=.*[A-Z])(?=.*[\\W])(?=\\S+$).{8,}")) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            updateUser(user);
+        } else {
+            throw new PasswordValidationException("Password should contain at least 8 characters, one uppercase letter, one lowercase letter, and one special character.");
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.viepovsky.user.dto;
+package com.viepovsky.user.dto.response;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDetailsResponseDTO {
+public class UserDetailsResponse {
     private Long id;
 
     private String login;

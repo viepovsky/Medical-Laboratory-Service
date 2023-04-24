@@ -19,4 +19,9 @@ public class GlobalHttpErrorHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleEntityExistsException(EntityExistsException entityExistsException) {
         return new ResponseEntity<>(entityExistsException.getMessage(), HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(PasswordValidationException.class)
+    public ResponseEntity<Object> handlePasswordValidationException(PasswordValidationException passwordValidationException) {
+        return new ResponseEntity<>(passwordValidationException.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

@@ -1,20 +1,15 @@
 package com.viepovsky.user;
 
-import com.viepovsky.user.dto.UserDetailsResponseDTO;
+import com.viepovsky.user.dto.request.UpdateUserRequest;
+import com.viepovsky.user.dto.response.CreatedUserResponse;
+import com.viepovsky.user.dto.request.RegisterUserRequest;
+import com.viepovsky.user.dto.response.UserDetailsResponse;
 import org.springframework.stereotype.Service;
 
 @Service
 class UserMapper {
-    UserDTO mapToUserDtoForLogin(User user) {
-        return new UserDTO(
-                user.getLogin(),
-                user.getPassword(),
-                user.getRole()
-        );
-    }
-
-    UserDetailsResponseDTO mapToUserDetailsResponseDto(User user) {
-        return new UserDetailsResponseDTO(
+    UserDetailsResponse mapToUserDetailsResponse(User user) {
+        return new UserDetailsResponse(
                 user.getId(),
                 user.getLogin(),
                 user.getPersonalId(),
@@ -25,21 +20,34 @@ class UserMapper {
         );
     }
 
-    User mapToUser(UserDTO userDTO) {
-        return new User(
-                userDTO.getLogin(),
-                userDTO.getPersonalId(),
-                userDTO.getPassword(),
-                userDTO.getEmail(),
-                userDTO.getName(),
-                userDTO.getLastName(),
-                userDTO.getPhoneNumber()
+    CreatedUserResponse mapToCreatedUserResponse(User user) {
+        return new CreatedUserResponse(
+                user.getId(),
+                user.getLogin()
         );
     }
 
-    UserDTO mapToCreatedUserDto(User user) {
-        return new UserDTO(
-                user.getId(),
-                user.getLogin());
+    User mapToUser(RegisterUserRequest request) {
+        return new User(
+                request.getLogin(),
+                request.getPersonalId(),
+                request.getPassword(),
+                request.getEmail(),
+                request.getFirstName(),
+                request.getLastName(),
+                request.getPhoneNumber()
+        );
+    }
+
+    User mapToUser(UpdateUserRequest request) {
+        return new User(
+                request.getLogin(),
+                request.getPersonalId(),
+                request.getPassword(),
+                request.getEmail(),
+                request.getFirstName(),
+                request.getLastName(),
+                request.getPhoneNumber()
+        );
     }
 }

@@ -1,4 +1,4 @@
-package com.viepovsky.user.dto;
+package com.viepovsky.user.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

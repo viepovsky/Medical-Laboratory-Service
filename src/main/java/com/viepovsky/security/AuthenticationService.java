@@ -2,8 +2,8 @@ package com.viepovsky.security;
 
 import com.viepovsky.user.User;
 import com.viepovsky.user.UserService;
-import com.viepovsky.user.dto.AuthenticationUserRequest;
-import com.viepovsky.user.dto.RegisterUserRequest;
+import com.viepovsky.user.dto.request.AuthenticationUserRequest;
+import com.viepovsky.user.dto.request.RegisterUserRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

@@ -1,31 +1,36 @@
 package com.viepovsky.diagnose;
 
+import com.viepovsky.diagnose.dto.DiagnosticResultRequest;
+import com.viepovsky.diagnose.dto.DiagnosticResultResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 class DiagnosticResultMapper {
-    DiagnosticResultDTO mapToDiagnosticResultDto(DiagnosticResult result) {
-        return new DiagnosticResultDTO(
+    DiagnosticResultResponse mapToDiagnosticResultResponse(DiagnosticResult result) {
+        return new DiagnosticResultResponse(
                 result.getId(),
-                result.getType(),
+                result.getType().toString(),
+                result.getStatus().toString(),
                 result.getRegistration(),
-                result.getResultsPdf(),
-                result.getUser().getLogin()
+                result.getResultsPdf()
         );
     }
 
-    List<DiagnosticResultDTO> mapToDiagnosticResultDtoList(List<DiagnosticResult> results) {
+    List<DiagnosticResultResponse> mapToDiagnosticResultResponseList(List<DiagnosticResult> results) {
         return results.stream()
-                .map(this::mapToDiagnosticResultDto)
+                .map(this::mapToDiagnosticResultResponse)
                 .toList();
     }
 
-    DiagnosticResult mapToDiagnosticResult(DiagnosticResultDTO resultDTO) {
+    DiagnosticResult mapToDiagnosticResult(DiagnosticResultRequest request) {
         return new DiagnosticResult(
-                resultDTO.getType(),
-                resultDTO.getResultsPdf()
+                request.getId(),
+                request.getType(),
+                request.getStatus(),
+                request.getRegistration(),
+                request.getResultsPdf()
         );
     }
 }

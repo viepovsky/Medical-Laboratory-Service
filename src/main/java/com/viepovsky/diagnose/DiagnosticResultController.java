@@ -1,5 +1,7 @@
 package com.viepovsky.diagnose;
 
+import com.viepovsky.diagnose.dto.DiagnosticResultRequest;
+import com.viepovsky.diagnose.dto.DiagnosticResultResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -25,22 +27,22 @@ class DiagnosticResultController {
     private final DiagnosticResultMapper mapper;
 
     @GetMapping
-    ResponseEntity<List<DiagnosticResultDTO>> getAllDiagnosticResults(@RequestParam(name = "login") @NotBlank String login) {
+    ResponseEntity<List<DiagnosticResultResponse>> getAllDiagnosticResults(@RequestParam(name = "login") @NotBlank String login) {
         logger.info("getAllDIagnosticResults endpoint used with login value: " + login);
         String loginFromToken = SecurityContextHolder.getContext().getAuthentication().getName();
         if (!loginFromToken.equals(login)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         List<DiagnosticResult> results = service.getAllDiagnosticResults(login);
-        return ResponseEntity.ok(mapper.mapToDiagnosticResultDtoList(results));
+        return ResponseEntity.ok(mapper.mapToDiagnosticResultResponseList(results));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    ResponseEntity<DiagnosticResultDTO> createDiagnosticResult(@RequestBody @Valid DiagnosticResultDTO resultDTO) {
+    ResponseEntity<DiagnosticResultResponse> createDiagnosticResult(@RequestBody @Valid DiagnosticResultRequest request) {
         logger.info("createDiagnosticResult endpoint used");
-        DiagnosticResult toSave = mapper.mapToDiagnosticResult(resultDTO);
-        DiagnosticResultDTO result = mapper.mapToDiagnosticResultDto(service.saveDiagnosticResult(toSave, resultDTO.getUserLogin()));
-        return ResponseEntity.created(URI.create("/medical/results?login=" + result.getUserLogin())).body(result);
+        DiagnosticResult toSave = mapper.mapToDiagnosticResult(request);
+        DiagnosticResultResponse result = mapper.mapToDiagnosticResultResponse(service.saveDiagnosticResult(toSave, request.getUserLogin()));
+        return ResponseEntity.created(URI.create("/medical/results?login=" + request.getUserLogin())).body(result);
     }
 }

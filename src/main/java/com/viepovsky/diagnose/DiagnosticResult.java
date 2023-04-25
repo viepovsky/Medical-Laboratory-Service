@@ -21,7 +21,11 @@ public class DiagnosticResult extends BaseEntityAudit {
     @SequenceGenerator(name = "results_seq", initialValue = 500, allocationSize = 1)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     private DiagnosticType type;
+
+    @Enumerated(EnumType.STRING)
+    private DiagnosticStatus status;
 
     private LocalDateTime registration;
 
@@ -32,8 +36,11 @@ public class DiagnosticResult extends BaseEntityAudit {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public DiagnosticResult(DiagnosticType type, byte[] resultsPdf) {
+    public DiagnosticResult(Long id, DiagnosticType type, DiagnosticStatus status, LocalDateTime registration, byte[] resultsPdf) {
+        this.id = id;
         this.type = type;
+        this.status = status;
+        this.registration = registration;
         this.resultsPdf = resultsPdf;
     }
 }

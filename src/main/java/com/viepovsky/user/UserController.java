@@ -4,7 +4,7 @@ import com.viepovsky.exceptions.PasswordValidationException;
 import com.viepovsky.user.dto.request.UpdateUserRequest;
 import com.viepovsky.user.dto.response.CreatedUserResponse;
 import com.viepovsky.user.dto.request.RegisterUserRequest;
-import com.viepovsky.user.dto.response.UserDetailsResponse;
+import com.viepovsky.user.dto.response.DetailsUserResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -30,13 +30,13 @@ class UserController {
     private final UserMapper mapper;
 
     @GetMapping
-    ResponseEntity<UserDetailsResponse> getUserByLogin(@RequestParam(name = "login") @NotBlank String login) {
+    ResponseEntity<DetailsUserResponse> getUserByLogin(@RequestParam(name = "login") @NotBlank String login) {
         logger.info("getUserByLogin endpoint used with login value: " + login);
         String loginFromToken = SecurityContextHolder.getContext().getAuthentication().getName();
         if (!loginFromToken.equals(login)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        var userDetails = mapper.mapToUserDetailsResponse(service.getUserByLogin(login));
+        var userDetails = mapper.mapToDetailsUserResponse(service.getUserByLogin(login));
         return ResponseEntity.ok(userDetails);
     }
 

@@ -1,4 +1,4 @@
-package com.viepovsky.security;
+package com.viepovsky.security.dto;
 
 import lombok.*;
 
@@ -7,6 +7,6 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-class AuthenticationResponse {
+public class AuthenticationResponse {
     private String token;
 }

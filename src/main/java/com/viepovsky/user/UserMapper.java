@@ -3,13 +3,13 @@ package com.viepovsky.user;
 import com.viepovsky.user.dto.request.UpdateUserRequest;
 import com.viepovsky.user.dto.response.CreatedUserResponse;
 import com.viepovsky.user.dto.request.RegisterUserRequest;
-import com.viepovsky.user.dto.response.UserDetailsResponse;
+import com.viepovsky.user.dto.response.DetailsUserResponse;
 import org.springframework.stereotype.Service;
 
 @Service
 class UserMapper {
-    UserDetailsResponse mapToUserDetailsResponse(User user) {
-        return new UserDetailsResponse(
+    DetailsUserResponse mapToDetailsUserResponse(User user) {
+        return new DetailsUserResponse(
                 user.getId(),
                 user.getLogin(),
                 user.getPersonalId(),

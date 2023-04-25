@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-enum DiagnosticType {
+public enum DiagnosticType {
     BLOOD("Blood test results"),
     URINE("Urine test results"),
     STOOL("Stool test results"),

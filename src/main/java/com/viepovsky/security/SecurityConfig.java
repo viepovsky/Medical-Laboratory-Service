@@ -27,6 +27,8 @@ class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/medical/auth/**")
                 .permitAll()
+                .requestMatchers("/medical/examinations/**")
+                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

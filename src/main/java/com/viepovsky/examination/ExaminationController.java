@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +38,7 @@ class ExaminationController {
         return ResponseEntity.ok(mapper.mapToExaminationResponse(examination));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     ResponseEntity<ExaminationResponse> saveExamination(@RequestBody @Valid ExaminationRequest request) {
         logger.info("createExamination endpoint used with body: " + request.toString());
@@ -45,6 +47,7 @@ class ExaminationController {
         return ResponseEntity.created(URI.create("/medical/examinations/" + saved.getId())).body(saved);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     ResponseEntity<Void> updateExamination(
             @PathVariable @Min(1) Long id,
@@ -57,6 +60,7 @@ class ExaminationController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteExamination(@PathVariable @Min(1) Long id) {
         service.deleteExamination(id);

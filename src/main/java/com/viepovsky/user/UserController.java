@@ -31,11 +31,11 @@ class UserController {
 
     @GetMapping
     ResponseEntity<UserDetailsResponse> getUserByLogin(@RequestParam(name = "login") @NotBlank String login) {
+        logger.info("getUserByLogin endpoint used with login value: " + login);
         String loginFromToken = SecurityContextHolder.getContext().getAuthentication().getName();
         if (!loginFromToken.equals(login)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        logger.info("getUserByLogin endpoint used with login value: " + login);
         var userDetails = mapper.mapToUserDetailsResponse(service.getUserByLogin(login));
         return ResponseEntity.ok(userDetails);
     }
@@ -43,7 +43,7 @@ class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     ResponseEntity<CreatedUserResponse> createUser(@RequestBody @Valid RegisterUserRequest request) {
-        logger.info("createUser endpoint used with body: " + request.toString());
+        logger.info("createUser endpoint used");
         User toSave = mapper.mapToUser(request);
         CreatedUserResponse result = mapper.mapToCreatedUserResponse(service.createUser(toSave));
         return ResponseEntity.created(URI.create("/medical/users?login=" + result.getLogin())).body(result);
@@ -51,6 +51,7 @@ class UserController {
 
     @PutMapping
     ResponseEntity<Void> updateUser(@RequestBody @Valid UpdateUserRequest request) throws PasswordValidationException {
+        logger.info("updateUser endpoint used");
         String loginFromToken = SecurityContextHolder.getContext().getAuthentication().getName();
         if (!loginFromToken.equals(request.getLogin())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();

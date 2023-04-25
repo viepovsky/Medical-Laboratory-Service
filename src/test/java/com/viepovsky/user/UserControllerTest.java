@@ -81,7 +81,7 @@ class UserControllerTest {
         var jsonResponse = new ObjectMapper().writeValueAsString(userResponse);
         var jwtToken = generateToken("testLogin", secretKey);
 
-        when(userDetailsService.loadUserByUsername("testLogin")).thenReturn(userInDb);
+        when(userDetailsService.loadUserByUsername(anyString())).thenReturn(userInDb);
         when(service.getUserByLogin(anyString())).thenReturn(Mockito.mock(User.class));
         when(mapper.mapToUserDetailsResponse(any(User.class))).thenReturn(userResponse);
         //When & then
@@ -99,7 +99,7 @@ class UserControllerTest {
         var userInDb = User.builder().login("testLogin22").role(Role.ROLE_USER).build();
         var jwtToken = generateToken("testLogin", secretKey);
 
-        when(userDetailsService.loadUserByUsername("testLogin")).thenReturn(userInDb);
+        when(userDetailsService.loadUserByUsername(anyString())).thenReturn(userInDb);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/medical/users")
@@ -119,7 +119,7 @@ class UserControllerTest {
         var userResponse = CreatedUserResponse.builder().login("testLogin").id(5L).build();
         var jsonResponse = new ObjectMapper().writeValueAsString(userResponse);
 
-        when(userDetailsService.loadUserByUsername("testAdmin")).thenReturn(adminInDb);
+        when(userDetailsService.loadUserByUsername(anyString())).thenReturn(adminInDb);
         when(mapper.mapToUser(any(RegisterUserRequest.class))).thenReturn(Mockito.mock(User.class));
         when(service.createUser(any(User.class))).thenReturn(Mockito.mock(User.class));
         when(mapper.mapToCreatedUserResponse(any(User.class))).thenReturn(userResponse);
@@ -143,7 +143,7 @@ class UserControllerTest {
                 .email("email").firstName("test").lastName("testlast").build();
         var jsonRequest = new ObjectMapper().writeValueAsString(userRequest);
 
-        when(userDetailsService.loadUserByUsername("testAdmin")).thenReturn(adminInDb);
+        when(userDetailsService.loadUserByUsername(anyString())).thenReturn(adminInDb);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/medical/users")
@@ -162,7 +162,7 @@ class UserControllerTest {
                 .email("email@email.com").firstName("test").lastName("testlast").build();
         var jsonRequest = new ObjectMapper().writeValueAsString(userRequest);
 
-        when(userDetailsService.loadUserByUsername("testUser")).thenReturn(userInDb);
+        when(userDetailsService.loadUserByUsername(anyString())).thenReturn(userInDb);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/medical/users")

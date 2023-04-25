@@ -5,7 +5,10 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,13 +27,18 @@ class DiagnosticResultController {
     @GetMapping
     ResponseEntity<List<DiagnosticResultDTO>> getAllDiagnosticResults(@RequestParam(name = "login") @NotBlank String login) {
         logger.info("getAllDIagnosticResults endpoint used with login value: " + login);
+        String loginFromToken = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (!loginFromToken.equals(login)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         List<DiagnosticResult> results = service.getAllDiagnosticResults(login);
         return ResponseEntity.ok(mapper.mapToDiagnosticResultDtoList(results));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     ResponseEntity<DiagnosticResultDTO> createDiagnosticResult(@RequestBody @Valid DiagnosticResultDTO resultDTO) {
-        logger.info("createDiagnosticResult endpoint used with body: " + resultDTO.toString());
+        logger.info("createDiagnosticResult endpoint used");
         DiagnosticResult toSave = mapper.mapToDiagnosticResult(resultDTO);
         DiagnosticResultDTO result = mapper.mapToDiagnosticResultDto(service.saveDiagnosticResult(toSave, resultDTO.getUserLogin()));
         return ResponseEntity.created(URI.create("/medical/results?login=" + result.getUserLogin())).body(result);

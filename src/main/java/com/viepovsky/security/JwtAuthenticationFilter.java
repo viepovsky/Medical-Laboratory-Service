@@ -1,6 +1,5 @@
 package com.viepovsky.security;
 
-import com.viepovsky.user.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

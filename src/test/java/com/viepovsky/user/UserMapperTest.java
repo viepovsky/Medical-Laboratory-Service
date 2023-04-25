@@ -1,5 +1,7 @@
 package com.viepovsky.user;
 
+import com.viepovsky.user.dto.request.RegisterUserRequest;
+import com.viepovsky.user.dto.request.UpdateUserRequest;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -10,41 +12,53 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserMapperTest {
     private final UserMapper mapper = new UserMapper();
     @Test
-    void should_map_User_to_UserDTO_for_login() {
+    void should_map_User_to_UserDetailsResponse() {
         //Given
-        var user = User.builder().login("testLogin").password("testPassword").role(Role.USER).build();
+        var user = User.builder().login("testLogin").name("test").build();
         //When
-        var retrievedUserDTO = mapper.mapToUserDtoForLogin(user);
+        var retrievedResponse = mapper.mapToUserDetailsResponse(user);
         //Then
-        assertThat(retrievedUserDTO).isNotNull();
-        assertEquals(user.getLogin(), retrievedUserDTO.getLogin());
-        assertEquals(user.getPassword(), retrievedUserDTO.getPassword());
-        assertEquals(user.getRole(), retrievedUserDTO.getRole());
+        assertThat(retrievedResponse).isNotNull();
+        assertEquals(user.getLogin(), retrievedResponse.getLogin());
+        assertEquals(user.getName(), retrievedResponse.getFirstName());
     }
 
     @Test
-    void should_map_UserDTO_to_User() {
+    void should_map_User_to_UserCreatedResponse() {
         //Given
-        var userDTO = UserDTO.builder().login("testLogin").personalId("testId").password("testPassword")
-                .email("test@Email.com").name("testName").lastName("lastName").phoneNumber("testNumber").build();
+        var user = User.builder().login("testLogin").id(5L).personalId("testId").email("test@Email.com")
+                .name("testName").lastName("lastName").phoneNumber("testNumber").build();
         //When
-        var retrievedUser = mapper.mapToUser(userDTO);
+        var retrievedResponse = mapper.mapToCreatedUserResponse(user);
+        //Then
+        assertThat(retrievedResponse).isNotNull();
+        assertEquals(user.getLogin(), retrievedResponse.getLogin());
+        assertEquals(user.getId(), retrievedResponse.getId());
+    }
+
+    @Test
+    void should_map_RegisterUserRequest_to_User() {
+        //Given
+        var user = RegisterUserRequest.builder().login("testLogin").personalId("testId").email("test@Email.com")
+                .firstName("testName").lastName("lastName").phoneNumber("testNumber").build();
+        //When
+        var retrievedUser = mapper.mapToUser(user);
         //Then
         assertThat(retrievedUser).isNotNull();
-        assertEquals(userDTO.getLogin(), retrievedUser.getLogin());
-        assertEquals(userDTO.getEmail(), retrievedUser.getEmail());
-        assertEquals(userDTO.getPhoneNumber(), retrievedUser.getPhoneNumber());
+        assertEquals(user.getLogin(), retrievedUser.getLogin());
+        assertEquals(user.getPersonalId(), retrievedUser.getPersonalId());
     }
 
     @Test
-    void should_map_User_to_UserDTO_for_creating_user_account() {
+    void should_map_UpdateUserRequest_to_User() {
         //Given
-        var user = User.builder().login("testLogin").id(52L).build();
+        var user = UpdateUserRequest.builder().login("testLogin").personalId("testId").email("test@Email.com")
+                .firstName("testName").lastName("lastName").phoneNumber("testNumber").build();
         //When
-        var retrievedUserDTO = mapper.mapToCreatedUserDto(user);
+        var retrievedUser = mapper.mapToUser(user);
         //Then
-        assertThat(retrievedUserDTO).isNotNull();
-        assertEquals(user.getLogin(), retrievedUserDTO.getLogin());
-        assertEquals(user.getId(), retrievedUserDTO.getId());
+        assertThat(retrievedUser).isNotNull();
+        assertEquals(user.getLogin(), retrievedUser.getLogin());
+        assertEquals(user.getPersonalId(), retrievedUser.getPersonalId());
     }
 }

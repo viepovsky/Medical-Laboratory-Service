@@ -16,7 +16,7 @@ class UserMapperTest {
         //Given
         var user = User.builder().login("testLogin").name("test").build();
         //When
-        var retrievedResponse = mapper.mapToUserDetailsResponse(user);
+        var retrievedResponse = mapper.mapToDetailsUserResponse(user);
         //Then
         assertThat(retrievedResponse).isNotNull();
         assertEquals(user.getLogin(), retrievedResponse.getLogin());

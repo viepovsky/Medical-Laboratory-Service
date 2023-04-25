@@ -1,6 +1,8 @@
 package com.viepovsky.diagnose;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.viepovsky.diagnose.dto.DiagnosticResultRequest;
+import com.viepovsky.diagnose.dto.DiagnosticResultResponse;
 import com.viepovsky.user.Role;
 import com.viepovsky.user.User;
 import io.jsonwebtoken.Jwts;
@@ -23,6 +25,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.security.Key;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -31,7 +34,6 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource(properties = "spring.config.additional-location=classpath:application-test.yml")
@@ -75,13 +77,13 @@ class DiagnosticResultControllerTest {
         var jwtToken = generateToken("testLogin", secretKey);
         var result = DiagnosticResult.builder().build();
         List<DiagnosticResult> results = new ArrayList<>(List.of(result));
-        var resultDTO = DiagnosticResultDTO.builder().build();
-        List<DiagnosticResultDTO> resultsDTO = new ArrayList<>(List.of(resultDTO));
+        var resultDTO = DiagnosticResultResponse.builder().build();
+        List<DiagnosticResultResponse> resultsDTO = new ArrayList<>(List.of(resultDTO));
         var json = new ObjectMapper().writeValueAsString(resultsDTO);
 
         when(userDetailsService.loadUserByUsername(anyString())).thenReturn(userInDb);
         when(service.getAllDiagnosticResults(anyString())).thenReturn(results);
-        when(mapper.mapToDiagnosticResultDtoList(results)).thenReturn(resultsDTO);
+        when(mapper.mapToDiagnosticResultResponseList(results)).thenReturn(resultsDTO);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/medical/results")
@@ -111,14 +113,16 @@ class DiagnosticResultControllerTest {
         //Given
         var adminInDb = User.builder().login("testAdmin").role(Role.ROLE_ADMIN).build();
         var jwtToken = generateToken("testAdmin", secretKey);
-        var resultRequest = DiagnosticResultDTO.builder().userLogin("test").type(DiagnosticType.BLOOD).resultsPdf(new byte[]{}).build();
-        var result = DiagnosticResult.builder().build();
+        var resultRequest = DiagnosticResultRequest.builder().status(DiagnosticStatus.AWAITING_RESULT).registration(LocalDateTime.now()).userLogin("test").type(DiagnosticType.BLOOD).resultsPdf(new byte[]{}).build();
         var jsonRequest = new ObjectMapper().writeValueAsString(resultRequest);
+        var result = DiagnosticResult.builder().build();
+        var resultResponse = DiagnosticResultResponse.builder().status("AWAITING_RESULT").type("BLOOD").resultsPdf(new byte[]{}).build();
+        var jsonResponse = new ObjectMapper().writeValueAsString(resultResponse);
 
         when(userDetailsService.loadUserByUsername(anyString())).thenReturn(adminInDb);
-        when(mapper.mapToDiagnosticResult(any(DiagnosticResultDTO.class))).thenReturn(result);
+        when(mapper.mapToDiagnosticResult(any(DiagnosticResultRequest.class))).thenReturn(result);
         when(service.saveDiagnosticResult(any(DiagnosticResult.class), anyString())).thenReturn(result);
-        when(mapper.mapToDiagnosticResultDto(any(DiagnosticResult.class))).thenReturn(resultRequest);
+        when(mapper.mapToDiagnosticResultResponse(any(DiagnosticResult.class))).thenReturn(resultResponse);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/medical/results")
@@ -126,7 +130,7 @@ class DiagnosticResultControllerTest {
                         .content(jsonRequest)
                         .header("Authorization", "Bearer " + jwtToken))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.content().json(jsonRequest))
+                .andExpect(MockMvcResultMatchers.content().json(jsonResponse))
                 .andExpect(MockMvcResultMatchers.header().string("Location", "/medical/results?login=test"));
     }
 }

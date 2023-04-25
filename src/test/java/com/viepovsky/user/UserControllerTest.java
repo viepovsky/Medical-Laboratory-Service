@@ -5,7 +5,7 @@ import com.viepovsky.exceptions.PasswordValidationException;
 import com.viepovsky.user.dto.request.RegisterUserRequest;
 import com.viepovsky.user.dto.request.UpdateUserRequest;
 import com.viepovsky.user.dto.response.CreatedUserResponse;
-import com.viepovsky.user.dto.response.UserDetailsResponse;
+import com.viepovsky.user.dto.response.DetailsUserResponse;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -77,13 +77,13 @@ class UserControllerTest {
     void should_get_user_details() throws Exception {
         //Given
         var userInDb = User.builder().login("testLogin").role(Role.ROLE_USER).build();
-        var userResponse = UserDetailsResponse.builder().login("testLogin").firstName("testName").build();
+        var userResponse = DetailsUserResponse.builder().login("testLogin").firstName("testName").build();
         var jsonResponse = new ObjectMapper().writeValueAsString(userResponse);
         var jwtToken = generateToken("testLogin", secretKey);
 
         when(userDetailsService.loadUserByUsername(anyString())).thenReturn(userInDb);
         when(service.getUserByLogin(anyString())).thenReturn(Mockito.mock(User.class));
-        when(mapper.mapToUserDetailsResponse(any(User.class))).thenReturn(userResponse);
+        when(mapper.mapToDetailsUserResponse(any(User.class))).thenReturn(userResponse);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/medical/users")

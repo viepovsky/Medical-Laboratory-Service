@@ -1,5 +1,6 @@
 package com.viepovsky.user;
 
+import com.viepovsky.exceptions.PasswordValidationException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -29,7 +30,7 @@ class UserServiceTest {
     @Test
     void should_get_and_return_user() {
         //Given
-        var expectedUser = User.builder().login("testLogin").password("testPassword").role(Role.USER).build();
+        var expectedUser = User.builder().login("testLogin").password("testPassword").role(Role.ROLE_USER).build();
         when(repository.findByLogin(anyString())).thenReturn(Optional.of(expectedUser));
         //When
         var retrievedUser = service.getUserByLogin("test");
@@ -52,7 +53,7 @@ class UserServiceTest {
     @Test
     void should_create_user() {
         //Given
-        var user = User.builder().login("testLogin").password("testPassword").role(Role.USER).build();
+        var user = User.builder().login("testLogin").password("testPassword").role(Role.ROLE_USER).build();
         when(repository.existsByLogin(anyString())).thenReturn(false);
         when(repository.save(any(User.class))).thenReturn(user);
         //When
@@ -66,7 +67,7 @@ class UserServiceTest {
     @Test
     void should_not_create_user_if_already_exists() {
         //Given
-        var user = User.builder().login("testLogin").password("testPassword").role(Role.USER).build();
+        var user = User.builder().login("testLogin").password("testPassword").role(Role.ROLE_USER).build();
         when(repository.existsByLogin(anyString())).thenReturn(true);
         //When & then
         assertThrows(EntityExistsException.class, () -> service.createUser(user));
@@ -76,7 +77,7 @@ class UserServiceTest {
     @Test
     void should_update_user() {
         //Given
-        var user = User.builder().id(5L).login("testLogin").password("testPassword").role(Role.USER).build();
+        var user = User.builder().id(5L).login("testLogin").password("testPassword").role(Role.ROLE_USER).build();
         when(repository.findByLogin(anyString())).thenReturn(Optional.of(user));
         when(repository.save(any(User.class))).thenReturn(user);
         //When
@@ -89,10 +90,29 @@ class UserServiceTest {
     @Test
     void should_not_update_user_that_doesnt_exists() {
         //Given
-        var user = User.builder().id(5L).login("testLogin").password("testPassword").role(Role.USER).build();
+        var user = User.builder().id(5L).login("testLogin").password("testPassword").role(Role.ROLE_USER).build();
         when(repository.findByLogin(anyString())).thenReturn(Optional.empty());
         //When & then
         assertThrows(EntityNotFoundException.class, () -> service.updateUser(user));
         verify(repository, times(0)).save(any(User.class));
+    }
+
+    @Test
+    void should_update_user_with_valid_password() throws PasswordValidationException {
+        //Given
+        var user = User.builder().id(5L).login("testLogin").password("testPassword123!").role(Role.ROLE_USER).build();
+        when(repository.findByLogin(anyString())).thenReturn(Optional.of(user));
+        when(repository.save(any(User.class))).thenReturn(user);
+        //When
+        service.updateUserWithPassword(user);
+        //Then
+        verify(repository, times(1)).save(any(User.class));
+    }
+    @Test
+    void should_not_update_user_if_password_is_invalid() {
+        //Given
+        var user = User.builder().id(5L).login("testLogin").password("testPassword").role(Role.ROLE_USER).build();
+        //When & then
+        assertThrows(PasswordValidationException.class, () -> service.updateUserWithPassword(user));
     }
 }

@@ -1,13 +1,15 @@
 package com.viepovsky.examination;
 
+import com.viepovsky.examination.dto.ExaminationRequest;
+import com.viepovsky.examination.dto.ExaminationResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 class ExaminationMapper {
-    ExaminationDTO mapToExaminationDto(Examination examination) {
-        return new ExaminationDTO(
+    ExaminationResponse mapToExaminationResponse(Examination examination) {
+        return new ExaminationResponse(
                 examination.getId(),
                 examination.getName(),
                 examination.getType(),
@@ -17,19 +19,19 @@ class ExaminationMapper {
         );
     }
 
-    List<ExaminationDTO> mapToExaminationDtoList(List<Examination> examinations) {
+    List<ExaminationResponse> mapToExaminationResponseList(List<Examination> examinations) {
         return examinations.stream()
-                .map(this::mapToExaminationDto)
+                .map(this::mapToExaminationResponse)
                 .toList();
     }
 
-    Examination mapToExamination(ExaminationDTO examinationDTO) {
+    Examination mapToExamination(ExaminationRequest request) {
         return Examination.builder()
-                .name(examinationDTO.getName())
-                .type(examinationDTO.getType())
-                .shortDescription(examinationDTO.getShortDescription())
-                .longDescription(examinationDTO.getLongDescription())
-                .cost(examinationDTO.getCost())
+                .name(request.getName())
+                .type(request.getType())
+                .shortDescription(request.getShortDescription())
+                .longDescription(request.getLongDescription())
+                .cost(request.getCost())
                 .build();
     }
 }

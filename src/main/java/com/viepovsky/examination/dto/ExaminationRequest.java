@@ -1,6 +1,6 @@
-package com.viepovsky.examination;
+package com.viepovsky.examination.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.viepovsky.examination.ExaminationType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -10,12 +10,9 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
-class ExaminationDTO {
-    private Long id;
-
+@AllArgsConstructor
+public class ExaminationRequest {
     @NotBlank(message = "Name must not be empty")
     private String name;
 

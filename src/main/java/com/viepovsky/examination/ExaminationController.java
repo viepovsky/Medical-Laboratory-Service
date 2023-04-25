@@ -1,5 +1,7 @@
 package com.viepovsky.examination;
 
+import com.viepovsky.examination.dto.ExaminationRequest;
+import com.viepovsky.examination.dto.ExaminationResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -22,34 +24,34 @@ class ExaminationController {
     private final ExaminationMapper mapper;
 
     @GetMapping
-    ResponseEntity<List<ExaminationDTO>> getAllExaminations() {
+    ResponseEntity<List<ExaminationResponse>> getAllExaminations() {
         logger.info("getAllExaminations endpoint used");
         List<Examination> examinations = service.getAllExaminations();
-        return ResponseEntity.ok(mapper.mapToExaminationDtoList(examinations));
+        return ResponseEntity.ok(mapper.mapToExaminationResponseList(examinations));
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<ExaminationDTO> getExamination(@PathVariable @Min(1) Long id) {
+    ResponseEntity<ExaminationResponse> getExamination(@PathVariable @Min(1) Long id) {
         logger.info("getExamination endpoint used with id value: " + id);
         Examination examination = service.getExamination(id);
-        return ResponseEntity.ok(mapper.mapToExaminationDto(examination));
+        return ResponseEntity.ok(mapper.mapToExaminationResponse(examination));
     }
 
     @PostMapping
-    ResponseEntity<ExaminationDTO> saveExamination(@RequestBody @Valid ExaminationDTO examinationDTO) {
-        logger.info("createExamination endpoint used with body: " + examinationDTO.toString());
-        Examination toSave = mapper.mapToExamination(examinationDTO);
-        ExaminationDTO saved = mapper.mapToExaminationDto(service.saveExamination(toSave));
+    ResponseEntity<ExaminationResponse> saveExamination(@RequestBody @Valid ExaminationRequest request) {
+        logger.info("createExamination endpoint used with body: " + request.toString());
+        Examination toSave = mapper.mapToExamination(request);
+        ExaminationResponse saved = mapper.mapToExaminationResponse(service.saveExamination(toSave));
         return ResponseEntity.created(URI.create("/medical/examinations/" + saved.getId())).body(saved);
     }
 
     @PutMapping("/{id}")
     ResponseEntity<Void> updateExamination(
             @PathVariable @Min(1) Long id,
-            @RequestBody @Valid ExaminationDTO examinationDTO
+            @RequestBody @Valid ExaminationRequest request
     ) {
-        logger.info("updateExamination endpoint used with id: " + id + " and body: " + examinationDTO.toString());
-        Examination examination = mapper.mapToExamination(examinationDTO);
+        logger.info("updateExamination endpoint used with id: " + id + " and body: " + request.toString());
+        Examination examination = mapper.mapToExamination(request);
         examination.setId(id);
         service.updateExamination(examination);
         return ResponseEntity.noContent().build();

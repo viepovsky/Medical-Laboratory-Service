@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.viepovsky</groupId>
 	<artifactId>Medical-Laboratory-Service</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0-VERSION</version>
 	<name>Medical-Laboratory-Service</name>
 	<description>Backend for Medical Laboratory</description>
 	<properties>

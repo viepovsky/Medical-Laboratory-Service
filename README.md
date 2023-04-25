@@ -6,8 +6,6 @@ Mediacal Laboratory Service is a **RESTful** application that allows patients to
 The application stores user personal data as well as diagnostic results, enabling users to view and download their results anytime, anywhere.
 The application is intended to be used by medical laboratories.
 
-**Please note that the application is still in development and is not yet complete.**
-
 ## 2. Technnologies
 
 The application currently uses the following frameworks and technologies: 
@@ -28,6 +26,8 @@ Additional frameworks and technologies may be added during further development.
 
 To run the application, you need to have `Postgres` installed. You can create a database named `medical`, or use a different one by updating the configuration in `application.yml`. Make sure to also check the username and password for the database.
 
+Before starting the application, you need to set an environment variable named `MEDICAL_SECRET_KEY` with a 256-bit hex encryption key or copy the one from `application-test.yml` and paste it into `application.yml`.
+
 To start the application, you can either run the `MedicalLaboratoryApplication` class, or type `./mvnw spring-boot:run` in your IDE terminal.
 
 Once the application is running, you can test it by sending requests to the endpoints using tools like Postman. The application runs on `http://localhost:8080/`
@@ -37,3 +37,10 @@ Keep in mind that the application is secured with JWT token. To access the endpo
 ## 4. Future plans for the application
 
 Next, I plan to add user and admin views to the application using HTML, CSS, and JavaScript.
+
+## 5. Screenshots
+
+![Swagger screenshot](src/main/resources/screenshots/swagger.jpg)
+
+
+![Test coverage screenshot](src/main/resources/screenshots/test-coverage.jpg)

@@ -23,26 +23,16 @@ import java.util.List;
 @Validated
 class DiagnosticResultController {
     private static final Logger logger = LoggerFactory.getLogger(DiagnosticResultController.class);
-    private final DiagnosticResultService service;
-    private final DiagnosticResultMapper mapper;
+    private final DiagnosticResultFacade facade;
 
     @GetMapping
     ResponseEntity<List<DiagnosticResultResponse>> getAllDiagnosticResults(@RequestParam(name = "login") @NotBlank String login) {
-        logger.info("getAllDIagnosticResults endpoint used with login value: " + login);
-        String loginFromToken = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (!loginFromToken.equals(login)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        List<DiagnosticResult> results = service.getAllDiagnosticResults(login);
-        return ResponseEntity.ok(mapper.mapToDiagnosticResultResponseList(results));
+        return facade.getAllDiagnosticResults(login);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     ResponseEntity<DiagnosticResultResponse> createDiagnosticResult(@RequestBody @Valid DiagnosticResultRequest request) {
-        logger.info("createDiagnosticResult endpoint used");
-        DiagnosticResult toSave = mapper.mapToDiagnosticResult(request);
-        DiagnosticResultResponse result = mapper.mapToDiagnosticResultResponse(service.saveDiagnosticResult(toSave, request.getUserLogin()));
-        return ResponseEntity.created(URI.create("/medical/results?login=" + request.getUserLogin())).body(result);
+        return facade.createDiagnosticResult(request);
     }
 }

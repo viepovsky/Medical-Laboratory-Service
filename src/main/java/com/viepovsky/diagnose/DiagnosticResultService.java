@@ -1,7 +1,6 @@
 package com.viepovsky.diagnose;
 
-import com.viepovsky.user.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
+import com.viepovsky.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,19 +10,19 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 class DiagnosticResultService {
-    private final DiagnosticResultRepository resultRepository;
-    private final UserRepository userRepository;
+    private final DiagnosticResultRepository repository;
+    private final UserService service;
 
     @Transactional //HACK: @Transactional must be here due to not throwing exceptions during fetching pdfs.
     List<DiagnosticResult> getAllDiagnosticResults(String login) {
-        return resultRepository.getDiagnosticResultByUser_Login(login);
+        return repository.getDiagnosticResultByUser_Login(login);
     }
 
     DiagnosticResult saveDiagnosticResult(DiagnosticResult result, String login) {
-        var retrievedUser = userRepository.findByLogin(login).orElseThrow(() -> new EntityNotFoundException("User with login: " + login + " does not exist in database."));
+        var retrievedUser = service.getUserByLogin(login);
         result.setUser(retrievedUser);
         retrievedUser.getResultsList().add(result);
-        userRepository.save(retrievedUser);
-        return resultRepository.save(result);
+        service.updateUser(retrievedUser);
+        return repository.save(result);
     }
 }

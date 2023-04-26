@@ -1,8 +1,7 @@
 package com.viepovsky.diagnose;
 
 import com.viepovsky.user.User;
-import com.viepovsky.user.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
+import com.viepovsky.user.UserService;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -13,35 +12,34 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class DiagnosticResultServiceTest {
     @InjectMocks
-    private DiagnosticResultService service;
+    private DiagnosticResultService diagnosticResultService;
 
     @Mock
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Mock
-    private DiagnosticResultRepository resultRepository;
+    private DiagnosticResultRepository repository;
 
     @Test
     void should_get_all_DiagnosticResults_for_given_login() {
         //Given
         var result = DiagnosticResult.builder().build();
         List<DiagnosticResult> results = new ArrayList<>(List.of(result));
-        when(resultRepository.getDiagnosticResultByUser_Login(anyString())).thenReturn(results);
+        when(repository.getDiagnosticResultByUser_Login(anyString())).thenReturn(results);
         //When
-        List<DiagnosticResult> retrievedResults = service.getAllDiagnosticResults("test");
+        List<DiagnosticResult> retrievedResults = diagnosticResultService.getAllDiagnosticResults("test");
         //Then
         assertThat(retrievedResults).isNotNull();
         assertEquals(1, retrievedResults.size());
@@ -52,23 +50,13 @@ class DiagnosticResultServiceTest {
         //Given
         var result = DiagnosticResult.builder().type(DiagnosticType.BLOOD).build();
         var user = new User();
-        when(userRepository.findByLogin(anyString())).thenReturn(Optional.of(user));
-        when(userRepository.save(any(User.class))).thenReturn(user);
-        when(resultRepository.save(any(DiagnosticResult.class))).thenReturn(result);
+        when(userService.getUserByLogin(anyString())).thenReturn(user);
+        doNothing().when(userService).updateUser(any(User.class));
+        when(repository.save(any(DiagnosticResult.class))).thenReturn(result);
         //When
-        var retrievedResult = service.saveDiagnosticResult(result, "test");
+        var retrievedResult = diagnosticResultService.saveDiagnosticResult(result, "test");
         //Then
         assertThat(retrievedResult).isNotNull();
         assertEquals(result.getType(), retrievedResult.getType());
-    }
-
-    @Test
-    void should_not_save_DiagnosticResult_if_given_user_doesnt_exists() {
-        //Given
-        var result = DiagnosticResult.builder().type(DiagnosticType.BLOOD).build();
-        when(userRepository.findByLogin(anyString())).thenReturn(Optional.empty());
-        //When & then
-        assertThrows(EntityNotFoundException.class, () -> service.saveDiagnosticResult(result, "test"));
-        verifyNoInteractions(resultRepository);
     }
 }

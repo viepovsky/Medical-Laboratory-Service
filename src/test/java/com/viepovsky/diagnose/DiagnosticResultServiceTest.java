@@ -12,13 +12,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -58,5 +57,20 @@ class DiagnosticResultServiceTest {
         //Then
         assertThat(retrievedResult).isNotNull();
         assertEquals(result.getType(), retrievedResult.getType());
+    }
+
+    @Test
+    void should_update_DiagnosticResult() {
+        //Given
+        var result = DiagnosticResult.builder().type(DiagnosticType.BLOOD).build();
+        var user = new User();
+
+        when(repository.findById(anyLong())).thenReturn(Optional.of(result));
+        when(userService.getUserByLogin(anyString())).thenReturn(user);
+        when(repository.save(any(DiagnosticResult.class))).thenReturn(result);
+        //When
+        diagnosticResultService.updateDiagnosticResult(result, "login", 5L);
+        //Then
+        verify(repository, times(1)).save(any(DiagnosticResult.class));
     }
 }

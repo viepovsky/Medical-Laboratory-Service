@@ -26,7 +26,6 @@ class DiagnosticResultMapper {
 
     DiagnosticResult mapToDiagnosticResult(DiagnosticResultRequest request) {
         return new DiagnosticResult(
-                request.getId(),
                 request.getType(),
                 request.getStatus(),
                 request.getRegistration(),

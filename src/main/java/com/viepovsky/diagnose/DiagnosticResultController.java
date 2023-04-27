@@ -3,6 +3,7 @@ package com.viepovsky.diagnose;
 import com.viepovsky.diagnose.dto.DiagnosticResultRequest;
 import com.viepovsky.diagnose.dto.DiagnosticResultResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,5 +29,13 @@ class DiagnosticResultController {
     @PostMapping
     ResponseEntity<DiagnosticResultResponse> createDiagnosticResult(@RequestBody @Valid DiagnosticResultRequest request) {
         return facade.createDiagnosticResult(request);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping(path = "/{id}")
+    ResponseEntity<Void> updateDiagnosticResult(
+            @RequestBody @Valid DiagnosticResultRequest request,
+            @PathVariable @Min(1) Long id) {
+        return facade.updateDiagnosticResult(request, id);
     }
 }

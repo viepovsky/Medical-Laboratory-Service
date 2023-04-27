@@ -1,6 +1,7 @@
 package com.viepovsky.diagnose;
 
 import com.viepovsky.user.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,5 +25,13 @@ class DiagnosticResultService {
         retrievedUser.getResultsList().add(result);
         service.updateUser(retrievedUser);
         return repository.save(result);
+    }
+
+    void updateDiagnosticResult(DiagnosticResult result, String login, Long resultId) {
+        var resultToUpdate = repository.findById(resultId).orElseThrow(() -> new EntityNotFoundException("DiagnosticResult with id: " + resultId + " does not exist in database."));
+        var user = service.getUserByLogin(login);
+        resultToUpdate.updateFrom(result);
+        resultToUpdate.setUser(user);
+        repository.save(resultToUpdate);
     }
 }

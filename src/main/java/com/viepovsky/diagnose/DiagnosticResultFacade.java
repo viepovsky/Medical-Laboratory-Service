@@ -2,6 +2,7 @@ package com.viepovsky.diagnose;
 
 import com.viepovsky.diagnose.dto.DiagnosticResultRequest;
 import com.viepovsky.diagnose.dto.DiagnosticResultResponse;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,5 +33,12 @@ class DiagnosticResultFacade {
         DiagnosticResult toSave = mapper.mapToDiagnosticResult(request);
         DiagnosticResultResponse result = mapper.mapToDiagnosticResultResponse(service.saveDiagnosticResult(toSave, request.getUserLogin()));
         return ResponseEntity.created(URI.create("/medical/results?login=" + request.getUserLogin())).body(result);
+    }
+
+    ResponseEntity<Void> updateDiagnosticResult(DiagnosticResultRequest request, Long resultId) {
+        logger.info("updateDiagnosticResult endpoint used");
+        DiagnosticResult toUpdate = mapper.mapToDiagnosticResult(request);
+        service.updateDiagnosticResult(toUpdate, request.getUserLogin(), resultId);
+        return ResponseEntity.noContent().build();
     }
 }

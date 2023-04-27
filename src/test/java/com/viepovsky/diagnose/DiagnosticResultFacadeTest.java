@@ -18,6 +18,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -80,5 +81,19 @@ class DiagnosticResultFacadeTest {
         assertNotNull(retrievedResponse.getBody());
         assertEquals(HttpStatus.CREATED, retrievedResponse.getStatusCode());
         assertEquals("/medical/results?login=test", retrievedResponse.getHeaders().getLocation().toString());
-}
+    }
+
+    @Test
+    void should_update_DiagnosticResult() {
+        //Given
+        var resultRequest = DiagnosticResultRequest.builder().status(DiagnosticStatus.AWAITING_RESULT).registration(LocalDateTime.now()).userLogin("test").type(DiagnosticType.BLOOD).resultsPdf(new byte[]{}).build();
+        var result = DiagnosticResult.builder().build();
+
+        when(mapper.mapToDiagnosticResult(any(DiagnosticResultRequest.class))).thenReturn(result);
+        doNothing().when(service).updateDiagnosticResult(any(DiagnosticResult.class), anyString(), anyLong());
+        //When
+        ResponseEntity<Void> retrievedResponse = facade.updateDiagnosticResult(resultRequest, 5L);
+        //Then
+        assertEquals(HttpStatus.NO_CONTENT, retrievedResponse.getStatusCode());
+    }
 }

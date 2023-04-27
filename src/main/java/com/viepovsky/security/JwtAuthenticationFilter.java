@@ -1,10 +1,15 @@
 package com.viepovsky.security;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +24,7 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 class JwtAuthenticationFilter extends OncePerRequestFilter {
+    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
@@ -32,7 +38,21 @@ class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         jwt = authorizationHeader.substring(7);
-        userLogin = jwtService.extractUserLogin(jwt);
+        try {
+            userLogin = jwtService.extractUserLogin(jwt);
+        } catch (MalformedJwtException exception) {
+           logger.error("MalformedJwtException thrown, exception message: " + exception.getMessage());
+            filterChain.doFilter(request, response);
+            return;
+        } catch (ExpiredJwtException exception) {
+            logger.error("ExpiredJwtException thrown, exception message: " + exception.getMessage());
+            filterChain.doFilter(request, response);
+            return;
+        } catch (SignatureException exception) {
+            logger.error("SignatureException thrown, exception message: " + exception.getMessage());
+            filterChain.doFilter(request, response);
+            return;
+        }
         if (userLogin != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userLogin);
             if (jwtService.isTokenValid(jwt, userDetails)) {

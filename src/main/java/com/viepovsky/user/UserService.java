@@ -23,7 +23,7 @@ public class UserService {
         return repository.save(user);
     }
 
-    void updateUser(User user) {
+    public void updateUser(User user) {
         var retrievedUser = repository.findByLogin(user.getLogin()).orElseThrow(() -> new EntityNotFoundException("User with login: " + user.getLogin() + " does not exist in database."));
         retrievedUser.updateFrom(user);
         repository.save(retrievedUser);

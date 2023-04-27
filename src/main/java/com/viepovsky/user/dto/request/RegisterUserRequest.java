@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
+import org.hibernate.validator.constraints.pl.PESEL;
 
 @Getter
 @Setter
@@ -14,7 +15,7 @@ public class RegisterUserRequest {
     @NotBlank(message = "Login must not be empty")
     private String login;
 
-    @NotBlank(message = "Personal Id must not be empty")
+    @PESEL
     private String personalId;
 
     @Pattern(regexp = "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\W])(?=\\S+$).{8,}", message = "Password should contain at least 8 characters, one uppercase letter, one lowercase letter, and one special character.")

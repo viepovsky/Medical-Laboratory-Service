@@ -11,17 +11,17 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class GlobalHttpErrorHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException entityNotFoundException) {
-        return new ResponseEntity<>(entityNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
+    public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(EntityExistsException.class)
-    public ResponseEntity<Object> handleEntityExistsException(EntityExistsException entityExistsException) {
-        return new ResponseEntity<>(entityExistsException.getMessage(), HttpStatus.CONFLICT);
+    public ResponseEntity<Object> handleEntityExistsException(EntityExistsException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(PasswordValidationException.class)
-    public ResponseEntity<Object> handlePasswordValidationException(PasswordValidationException passwordValidationException) {
-        return new ResponseEntity<>(passwordValidationException.getMessage(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Object> handlePasswordValidationException(PasswordValidationException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -36,11 +37,17 @@ public class DiagnosticResult extends BaseEntityAudit {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public DiagnosticResult(Long id, DiagnosticType type, DiagnosticStatus status, LocalDateTime registration, byte[] resultsPdf) {
-        this.id = id;
+    DiagnosticResult(DiagnosticType type, DiagnosticStatus status, LocalDateTime registration, byte[] resultsPdf) {
         this.type = type;
         this.status = status;
         this.registration = registration;
         this.resultsPdf = resultsPdf;
+    }
+
+    void updateFrom(DiagnosticResult result) {
+        type = Optional.ofNullable(result.getType()).orElse(type);
+        status = Optional.ofNullable(result.getStatus()).orElse(status);
+        registration = Optional.ofNullable(result.getRegistration()).orElse(registration);
+        resultsPdf = Optional.ofNullable(result.getResultsPdf()).orElse(resultsPdf);
     }
 }

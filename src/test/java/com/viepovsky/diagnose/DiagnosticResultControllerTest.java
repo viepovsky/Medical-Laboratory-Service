@@ -17,13 +17,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.net.URI;
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -31,8 +34,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -43,10 +45,7 @@ class DiagnosticResultControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private DiagnosticResultService service;
-
-    @MockBean
-    private DiagnosticResultMapper mapper;
+    private DiagnosticResultFacade facade;
 
     @MockBean
     private UserDetailsService userDetailsService;
@@ -75,15 +74,12 @@ class DiagnosticResultControllerTest {
         //Given
         var userInDb = User.builder().login("testLogin").role(Role.ROLE_USER).build();
         var jwtToken = generateToken("testLogin", secretKey);
-        var result = DiagnosticResult.builder().build();
-        List<DiagnosticResult> results = new ArrayList<>(List.of(result));
-        var resultDTO = DiagnosticResultResponse.builder().build();
-        List<DiagnosticResultResponse> resultsDTO = new ArrayList<>(List.of(resultDTO));
-        var json = new ObjectMapper().writeValueAsString(resultsDTO);
+        var resultResponse = DiagnosticResultResponse.builder().build();
+        List<DiagnosticResultResponse> resultResponses = new ArrayList<>(List.of(resultResponse));
+        var json = new ObjectMapper().writeValueAsString(resultResponses);
 
         when(userDetailsService.loadUserByUsername(anyString())).thenReturn(userInDb);
-        when(service.getAllDiagnosticResults(anyString())).thenReturn(results);
-        when(mapper.mapToDiagnosticResultResponseList(results)).thenReturn(resultsDTO);
+        when(facade.getAllDiagnosticResults(anyString())).thenReturn(ResponseEntity.ok(resultResponses));
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/medical/results")
@@ -100,6 +96,7 @@ class DiagnosticResultControllerTest {
         var jwtToken = generateToken("testLogin", secretKey);
 
         when(userDetailsService.loadUserByUsername(anyString())).thenReturn(userInDb);
+        when(facade.getAllDiagnosticResults(anyString())).thenReturn(ResponseEntity.status(HttpStatus.FORBIDDEN).build());
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/medical/results")
@@ -115,14 +112,12 @@ class DiagnosticResultControllerTest {
         var jwtToken = generateToken("testAdmin", secretKey);
         var resultRequest = DiagnosticResultRequest.builder().status(DiagnosticStatus.AWAITING_RESULT).registration(LocalDateTime.now()).userLogin("test").type(DiagnosticType.BLOOD).resultsPdf(new byte[]{}).build();
         var jsonRequest = new ObjectMapper().writeValueAsString(resultRequest);
-        var result = DiagnosticResult.builder().build();
         var resultResponse = DiagnosticResultResponse.builder().status("AWAITING_RESULT").type("BLOOD").resultsPdf(new byte[]{}).build();
         var jsonResponse = new ObjectMapper().writeValueAsString(resultResponse);
 
         when(userDetailsService.loadUserByUsername(anyString())).thenReturn(adminInDb);
-        when(mapper.mapToDiagnosticResult(any(DiagnosticResultRequest.class))).thenReturn(result);
-        when(service.saveDiagnosticResult(any(DiagnosticResult.class), anyString())).thenReturn(result);
-        when(mapper.mapToDiagnosticResultResponse(any(DiagnosticResult.class))).thenReturn(resultResponse);
+        when(facade.createDiagnosticResult(any(DiagnosticResultRequest.class)))
+                .thenReturn(ResponseEntity.created(URI.create("/medical/results?login=" + resultRequest.getUserLogin())).body(resultResponse));
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/medical/results")
@@ -132,5 +127,24 @@ class DiagnosticResultControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.content().json(jsonResponse))
                 .andExpect(MockMvcResultMatchers.header().string("Location", "/medical/results?login=test"));
+    }
+
+    @Test
+    void should_update_DiagnosticResult() throws Exception {
+        //Given
+        var adminInDb = User.builder().login("testAdmin").role(Role.ROLE_ADMIN).build();
+        var jwtToken = generateToken("testAdmin", secretKey);
+        var resultRequest = DiagnosticResultRequest.builder().status(DiagnosticStatus.AWAITING_RESULT).registration(LocalDateTime.now()).userLogin("test").type(DiagnosticType.BLOOD).resultsPdf(new byte[]{}).build();
+        var jsonRequest = new ObjectMapper().writeValueAsString(resultRequest);
+
+        when(userDetailsService.loadUserByUsername(anyString())).thenReturn(adminInDb);
+        when(facade.updateDiagnosticResult(any(DiagnosticResultRequest.class), anyLong())).thenReturn(ResponseEntity.noContent().build());
+        //When & then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/medical/results/5")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest)
+                        .header("Authorization", "Bearer " + jwtToken))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 }

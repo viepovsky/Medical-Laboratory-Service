@@ -19,8 +19,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DiagnosticResultRequest {
-    private Long id;
-
     @NotNull
     private DiagnosticType type;
 

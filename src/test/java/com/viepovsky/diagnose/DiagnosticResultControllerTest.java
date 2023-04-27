@@ -34,8 +34,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -128,5 +127,24 @@ class DiagnosticResultControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.content().json(jsonResponse))
                 .andExpect(MockMvcResultMatchers.header().string("Location", "/medical/results?login=test"));
+    }
+
+    @Test
+    void should_update_DiagnosticResult() throws Exception {
+        //Given
+        var adminInDb = User.builder().login("testAdmin").role(Role.ROLE_ADMIN).build();
+        var jwtToken = generateToken("testAdmin", secretKey);
+        var resultRequest = DiagnosticResultRequest.builder().status(DiagnosticStatus.AWAITING_RESULT).registration(LocalDateTime.now()).userLogin("test").type(DiagnosticType.BLOOD).resultsPdf(new byte[]{}).build();
+        var jsonRequest = new ObjectMapper().writeValueAsString(resultRequest);
+
+        when(userDetailsService.loadUserByUsername(anyString())).thenReturn(adminInDb);
+        when(facade.updateDiagnosticResult(any(DiagnosticResultRequest.class), anyLong())).thenReturn(ResponseEntity.noContent().build());
+        //When & then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/medical/results/5")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest)
+                        .header("Authorization", "Bearer " + jwtToken))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 }

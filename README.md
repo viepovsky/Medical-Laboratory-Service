@@ -2,9 +2,11 @@
 
 ## 1. Description
 
-Mediacal Laboratory Service is a **RESTful** application that allows patients to access their laboratory test results online. 
-The application stores user personal data as well as diagnostic results, enabling users to view and download their results anytime, anywhere.
-The application is intended to be used by medical laboratories.
+Medical Laboratory Service is a secure **RESTful** application that allows patients to access their laboratory test results online. 
+The application's endpoints are protected using JSON Web Tokens, ensuring that only authorized users can access sensitive medical data. 
+The application stores user personal data, as well as diagnostic results. Users after authorization can simply view and download their results online. 
+In addition, the application allows patients to browse available examinations that are offered by the laboratory. 
+This application is specifically designed to be used by medical laboratories.
 
 ## 2. Technnologies
 
@@ -20,7 +22,7 @@ The application currently uses the following frameworks and technologies:
 - Maven
 - Swagger
 
-Additional frameworks and technologies may be added during further development.
+In this service I have used my own PESEL validation library to ensure the correctness of PESEL numbers. The library has been published on Maven Central Repository and is accessible for everyone to use. You can check out the library's code [**here**](https://github.com/viepovsky/PESEL).
 
 ## 3. How to run
 

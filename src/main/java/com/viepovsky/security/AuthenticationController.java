@@ -4,6 +4,7 @@ package com.viepovsky.security;
 import com.viepovsky.security.dto.AuthenticationResponse;
 import com.viepovsky.user.dto.request.AuthenticationUserRequest;
 import com.viepovsky.user.dto.request.RegisterUserRequest;
+import io.github.viepovsky.polishutils.pesel.InvalidPeselException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 class AuthenticationController {
     private final AuthenticationService service;
     @PostMapping("/register")
-    ResponseEntity<AuthenticationResponse> register(@RequestBody @Valid RegisterUserRequest request) {
+    ResponseEntity<AuthenticationResponse> register(@RequestBody @Valid RegisterUserRequest request) throws InvalidPeselException {
         return ResponseEntity.ok(service.register(request));
     }
 

@@ -2,6 +2,7 @@ package com.viepovsky.diagnose;
 
 import com.viepovsky.diagnose.dto.DiagnosticResultRequest;
 import com.viepovsky.diagnose.dto.DiagnosticResultResponse;
+import io.github.viepovsky.polishutils.pesel.InvalidPeselException;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -28,7 +29,7 @@ class DiagnosticResultFacade {
         return ResponseEntity.ok(mapper.mapToDiagnosticResultResponseList(results));
     }
 
-    ResponseEntity<DiagnosticResultResponse> createDiagnosticResult(DiagnosticResultRequest request) {
+    ResponseEntity<DiagnosticResultResponse> createDiagnosticResult(DiagnosticResultRequest request) throws InvalidPeselException {
         logger.info("createDiagnosticResult endpoint used");
         DiagnosticResult toSave = mapper.mapToDiagnosticResult(request);
         DiagnosticResultResponse result = mapper.mapToDiagnosticResultResponse(service.saveDiagnosticResult(toSave, request.getUserLogin()));

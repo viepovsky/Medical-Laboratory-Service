@@ -5,6 +5,7 @@ import com.viepovsky.user.dto.request.UpdateUserRequest;
 import com.viepovsky.user.dto.response.CreatedUserResponse;
 import com.viepovsky.user.dto.request.RegisterUserRequest;
 import com.viepovsky.user.dto.response.DetailsUserResponse;
+import io.github.viepovsky.polishutils.pesel.InvalidPeselException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +43,7 @@ class UserController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    ResponseEntity<CreatedUserResponse> createUser(@RequestBody @Valid RegisterUserRequest request) {
+    ResponseEntity<CreatedUserResponse> createUser(@RequestBody @Valid RegisterUserRequest request) throws InvalidPeselException {
         logger.info("createUser endpoint used");
         User toSave = mapper.mapToUser(request);
         CreatedUserResponse result = mapper.mapToCreatedUserResponse(service.createUser(toSave));
@@ -50,7 +51,7 @@ class UserController {
     }
 
     @PutMapping
-    ResponseEntity<Void> updateUser(@RequestBody @Valid UpdateUserRequest request) throws PasswordValidationException {
+    ResponseEntity<Void> updateUser(@RequestBody @Valid UpdateUserRequest request) throws PasswordValidationException, InvalidPeselException {
         logger.info("updateUser endpoint used");
         String loginFromToken = SecurityContextHolder.getContext().getAuthentication().getName();
         if (!loginFromToken.equals(request.getLogin())) {

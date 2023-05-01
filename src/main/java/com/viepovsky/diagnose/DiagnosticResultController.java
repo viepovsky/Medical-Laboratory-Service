@@ -2,6 +2,7 @@ package com.viepovsky.diagnose;
 
 import com.viepovsky.diagnose.dto.DiagnosticResultRequest;
 import com.viepovsky.diagnose.dto.DiagnosticResultResponse;
+import io.github.viepovsky.polishutils.pesel.InvalidPeselException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -27,7 +28,7 @@ class DiagnosticResultController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    ResponseEntity<DiagnosticResultResponse> createDiagnosticResult(@RequestBody @Valid DiagnosticResultRequest request) {
+    ResponseEntity<DiagnosticResultResponse> createDiagnosticResult(@RequestBody @Valid DiagnosticResultRequest request) throws InvalidPeselException {
         return facade.createDiagnosticResult(request);
     }
 

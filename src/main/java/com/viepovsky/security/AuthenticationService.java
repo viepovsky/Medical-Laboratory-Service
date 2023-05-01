@@ -5,6 +5,7 @@ import com.viepovsky.user.User;
 import com.viepovsky.user.UserService;
 import com.viepovsky.user.dto.request.AuthenticationUserRequest;
 import com.viepovsky.user.dto.request.RegisterUserRequest;
+import io.github.viepovsky.polishutils.pesel.InvalidPeselException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,7 +20,7 @@ class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    AuthenticationResponse register(RegisterUserRequest request) {
+    AuthenticationResponse register(RegisterUserRequest request) throws InvalidPeselException {
         var user = User.builder()
                 .login(request.getLogin())
                 .personalId(request.getPersonalId())

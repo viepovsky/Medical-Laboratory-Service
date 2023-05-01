@@ -1,5 +1,6 @@
 package com.viepovsky.exceptions;
 
+import io.github.viepovsky.polishutils.pesel.InvalidPeselException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,11 @@ public class GlobalHttpErrorHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(PasswordValidationException.class)
     public ResponseEntity<Object> handlePasswordValidationException(PasswordValidationException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidPeselException.class)
+    public ResponseEntity<Object> handleInvalidPeselException(InvalidPeselException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

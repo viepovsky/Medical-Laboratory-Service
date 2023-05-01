@@ -15,7 +15,7 @@ public class RegisterUserRequest {
     @NotBlank(message = "Login must not be empty")
     private String login;
 
-    @PESEL
+    @NotBlank
     private String personalId;
 
     @Pattern(regexp = "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\W])(?=\\S+$).{8,}", message = "Password should contain at least 8 characters, one uppercase letter, one lowercase letter, and one special character.")

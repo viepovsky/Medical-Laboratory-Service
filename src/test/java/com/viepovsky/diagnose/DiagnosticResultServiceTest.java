@@ -2,6 +2,7 @@ package com.viepovsky.diagnose;
 
 import com.viepovsky.user.User;
 import com.viepovsky.user.UserService;
+import io.github.viepovsky.polishutils.pesel.InvalidPeselException;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -45,7 +46,7 @@ class DiagnosticResultServiceTest {
     }
 
     @Test
-    void should_save_DiagnosticResult() {
+    void should_save_DiagnosticResult() throws InvalidPeselException {
         //Given
         var result = DiagnosticResult.builder().type(DiagnosticType.BLOOD).build();
         var user = new User();

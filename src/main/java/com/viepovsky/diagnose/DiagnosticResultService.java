@@ -1,6 +1,7 @@
 package com.viepovsky.diagnose;
 
 import com.viepovsky.user.UserService;
+import io.github.viepovsky.polishutils.pesel.InvalidPeselException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ class DiagnosticResultService {
         return repository.getDiagnosticResultByUser_Login(login);
     }
 
-    DiagnosticResult saveDiagnosticResult(DiagnosticResult result, String login) {
+    DiagnosticResult saveDiagnosticResult(DiagnosticResult result, String login) throws InvalidPeselException {
         var retrievedUser = service.getUserByLogin(login);
         result.setUser(retrievedUser);
         retrievedUser.getResultsList().add(result);

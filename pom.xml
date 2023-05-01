@@ -94,6 +94,12 @@
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.1.0</version>
 		</dependency>
+
+		<dependency>
+			<groupId>io.github.viepovsky</groupId>
+			<artifactId>pesel</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>

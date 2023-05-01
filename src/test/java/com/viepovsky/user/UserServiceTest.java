@@ -1,6 +1,7 @@
 package com.viepovsky.user;
 
 import com.viepovsky.exceptions.PasswordValidationException;
+import io.github.viepovsky.polishutils.pesel.InvalidPeselException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -51,7 +52,7 @@ class UserServiceTest {
     }
 
     @Test
-    void should_create_user() {
+    void should_create_user() throws InvalidPeselException {
         //Given
         var user = User.builder().login("testLogin").password("testPassword").role(Role.ROLE_USER).build();
         when(repository.existsByLogin(anyString())).thenReturn(false);
@@ -75,7 +76,7 @@ class UserServiceTest {
     }
 
     @Test
-    void should_update_user() {
+    void should_update_user() throws InvalidPeselException {
         //Given
         var user = User.builder().id(5L).login("testLogin").password("testPassword").role(Role.ROLE_USER).build();
         when(repository.findByLogin(anyString())).thenReturn(Optional.of(user));
@@ -98,7 +99,7 @@ class UserServiceTest {
     }
 
     @Test
-    void should_update_user_with_valid_password() throws PasswordValidationException {
+    void should_update_user_with_valid_password() throws PasswordValidationException, InvalidPeselException {
         //Given
         var user = User.builder().id(5L).login("testLogin").password("testPassword123!").role(Role.ROLE_USER).build();
         when(repository.findByLogin(anyString())).thenReturn(Optional.of(user));

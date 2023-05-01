@@ -2,6 +2,7 @@ package com.viepovsky.diagnose;
 
 import com.viepovsky.diagnose.dto.DiagnosticResultRequest;
 import com.viepovsky.diagnose.dto.DiagnosticResultResponse;
+import io.github.viepovsky.polishutils.pesel.InvalidPeselException;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -66,7 +67,7 @@ class DiagnosticResultFacadeTest {
     }
 
     @Test
-        void should_create_DiagnosticResult() {
+        void should_create_DiagnosticResult() throws InvalidPeselException {
         //Given
         var resultRequest = DiagnosticResultRequest.builder().status(DiagnosticStatus.AWAITING_RESULT).registration(LocalDateTime.now()).userLogin("test").type(DiagnosticType.BLOOD).resultsPdf(new byte[]{}).build();
         var result = DiagnosticResult.builder().build();

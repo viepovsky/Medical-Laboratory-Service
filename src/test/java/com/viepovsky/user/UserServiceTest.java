@@ -54,7 +54,7 @@ class UserServiceTest {
     @Test
     void should_create_user() throws InvalidPeselException {
         //Given
-        var user = User.builder().login("testLogin").password("testPassword").role(Role.ROLE_USER).build();
+        var user = User.builder().login("testLogin").password("testPassword").personalId("92082683499").role(Role.ROLE_USER).build();
         when(repository.existsByLogin(anyString())).thenReturn(false);
         when(repository.save(any(User.class))).thenReturn(user);
         //When
@@ -68,7 +68,7 @@ class UserServiceTest {
     @Test
     void should_not_create_user_if_already_exists() {
         //Given
-        var user = User.builder().login("testLogin").password("testPassword").role(Role.ROLE_USER).build();
+        var user = User.builder().login("testLogin").password("testPassword").personalId("92082683499").role(Role.ROLE_USER).build();
         when(repository.existsByLogin(anyString())).thenReturn(true);
         //When & then
         assertThrows(EntityExistsException.class, () -> service.createUser(user));
@@ -78,7 +78,7 @@ class UserServiceTest {
     @Test
     void should_update_user() throws InvalidPeselException {
         //Given
-        var user = User.builder().id(5L).login("testLogin").password("testPassword").role(Role.ROLE_USER).build();
+        var user = User.builder().id(5L).login("testLogin").password("testPassword").personalId("92082683499").role(Role.ROLE_USER).build();
         when(repository.findByLogin(anyString())).thenReturn(Optional.of(user));
         when(repository.save(any(User.class))).thenReturn(user);
         //When
@@ -91,7 +91,7 @@ class UserServiceTest {
     @Test
     void should_not_update_user_that_doesnt_exists() {
         //Given
-        var user = User.builder().id(5L).login("testLogin").password("testPassword").role(Role.ROLE_USER).build();
+        var user = User.builder().id(5L).login("testLogin").password("testPassword").personalId("92082683499").role(Role.ROLE_USER).build();
         when(repository.findByLogin(anyString())).thenReturn(Optional.empty());
         //When & then
         assertThrows(EntityNotFoundException.class, () -> service.updateUser(user));
@@ -101,7 +101,7 @@ class UserServiceTest {
     @Test
     void should_update_user_with_valid_password() throws PasswordValidationException, InvalidPeselException {
         //Given
-        var user = User.builder().id(5L).login("testLogin").password("testPassword123!").role(Role.ROLE_USER).build();
+        var user = User.builder().id(5L).login("testLogin").password("testPassword123!").personalId("92082683499").role(Role.ROLE_USER).build();
         when(repository.findByLogin(anyString())).thenReturn(Optional.of(user));
         when(repository.save(any(User.class))).thenReturn(user);
         //When

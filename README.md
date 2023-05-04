@@ -1,4 +1,6 @@
 # Medical Laboratory Service
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/viepovsky/Medical-Laboratory-Service/maven.yml?style=plastic)](https://github.com/viepovsky/Medical-Laboratory-Service/actions/workflows/maven.yml)
+[![Codecov test coverage](https://img.shields.io/codecov/c/github/viepovsky/Medical-Laboratory-Service?style=plastic)](https://codecov.io/gh/viepovsky/Medical-Laboratory-Service)
 
 ## 1. Description
 

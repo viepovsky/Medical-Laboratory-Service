@@ -36,6 +36,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource(properties = "spring.config.additional-location=classpath:application-test.yml")
@@ -64,6 +65,7 @@ class DiagnosticResultControllerTest {
                 .signWith(getSignInKey(secretKey), SignatureAlgorithm.HS256)
                 .compact();
     }
+
     private static Key getSignInKey(String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);

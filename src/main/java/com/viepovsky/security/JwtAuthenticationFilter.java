@@ -2,6 +2,7 @@ package com.viepovsky.security;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.io.DecodingException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -50,6 +51,10 @@ class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         } catch (SignatureException exception) {
             logger.error("SignatureException thrown, exception message: " + exception.getMessage());
+            filterChain.doFilter(request, response);
+            return;
+        } catch (DecodingException exception) {
+            logger.error("DecodingException thrown, exception message: " + exception.getMessage());
             filterChain.doFilter(request, response);
             return;
         }

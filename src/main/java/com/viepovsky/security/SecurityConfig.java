@@ -21,26 +21,25 @@ class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf()
-                .disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/medical/auth/**")
-                .permitAll()
-                .requestMatchers("/medical/examinations/**")
-                .permitAll()
-                .requestMatchers("/v3/api-docs/**")
-                .permitAll()
-                .requestMatchers("/swagger-ui/**")
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        http.csrf()
+            .disable()
+            .authorizeHttpRequests()
+            .requestMatchers("/medical/auth/**")
+            .permitAll()
+            .requestMatchers("/medical/examinations/**")
+            .permitAll()
+            .requestMatchers("/v3/api-docs/**")
+            .permitAll()
+            .requestMatchers("/swagger-ui/**")
+            .permitAll()
+            .anyRequest()
+            .authenticated()
+            .and()
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+            .authenticationProvider(authenticationProvider)
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

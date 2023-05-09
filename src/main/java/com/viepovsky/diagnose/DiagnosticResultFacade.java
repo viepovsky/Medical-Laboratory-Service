@@ -2,8 +2,8 @@ package com.viepovsky.diagnose;
 
 import com.viepovsky.diagnose.dto.DiagnosticResultRequest;
 import com.viepovsky.diagnose.dto.DiagnosticResultResponse;
+import com.viepovsky.utilities.LoginValidator;
 import io.github.viepovsky.polishutils.pesel.InvalidPeselException;
-import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

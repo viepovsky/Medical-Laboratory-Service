@@ -6,6 +6,7 @@ import com.viepovsky.user.dto.request.RegisterUserRequest;
 import com.viepovsky.user.dto.request.UpdateUserRequest;
 import com.viepovsky.user.dto.response.CreatedUserResponse;
 import com.viepovsky.user.dto.response.DetailsUserResponse;
+import com.viepovsky.utilities.LoginValidator;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -13,7 +14,6 @@ import io.jsonwebtoken.security.Keys;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -46,11 +46,10 @@ class UserControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private UserService service;
+    private UserFacade facade;
 
     @MockBean
-    private UserMapper mapper;
-
+    private LoginValidator validator;
     @MockBean
     private UserDetailsService userDetailsService;
 
@@ -68,6 +67,7 @@ class UserControllerTest {
                 .signWith(getSignInKey(secretKey), SignatureAlgorithm.HS256)
                 .compact();
     }
+
     private static Key getSignInKey(String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
@@ -82,8 +82,8 @@ class UserControllerTest {
         var jwtToken = generateToken("testLogin", secretKey);
 
         when(userDetailsService.loadUserByUsername(anyString())).thenReturn(userInDb);
-        when(service.getUserByLogin(anyString())).thenReturn(Mockito.mock(User.class));
-        when(mapper.mapToDetailsUserResponse(any(User.class))).thenReturn(userResponse);
+        when(validator.isUserAuthorized(anyString())).thenReturn(true);
+        when(facade.getUserByLogin(anyString())).thenReturn(userResponse);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/medical/users")
@@ -97,9 +97,10 @@ class UserControllerTest {
     void should_not_get_user_details_if_token_login_doesnt_match_with_given_login() throws Exception {
         //Given
         var userInDb = User.builder().login("testLogin22").role(Role.ROLE_USER).build();
-        var jwtToken = generateToken("testLogin", secretKey);
+        var jwtToken = generateToken("testLogin22", secretKey);
 
         when(userDetailsService.loadUserByUsername(anyString())).thenReturn(userInDb);
+        when(validator.isUserAuthorized(anyString())).thenReturn(false);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/medical/users")
@@ -120,9 +121,7 @@ class UserControllerTest {
         var jsonResponse = new ObjectMapper().writeValueAsString(userResponse);
 
         when(userDetailsService.loadUserByUsername(anyString())).thenReturn(adminInDb);
-        when(mapper.mapToUser(any(RegisterUserRequest.class))).thenReturn(Mockito.mock(User.class));
-        when(service.createUser(any(User.class))).thenReturn(Mockito.mock(User.class));
-        when(mapper.mapToCreatedUserResponse(any(User.class))).thenReturn(userResponse);
+        when(facade.createUser(any(RegisterUserRequest.class))).thenReturn(userResponse);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/medical/users")
@@ -183,8 +182,8 @@ class UserControllerTest {
         var jsonRequest = new ObjectMapper().writeValueAsString(userRequest);
 
         when(userDetailsService.loadUserByUsername(anyString())).thenReturn(user);
-        when(mapper.mapToUser(any(UpdateUserRequest.class))).thenReturn(user);
-        doNothing().when(service).updateUserWithPassword(any(User.class));
+        when(validator.isUserAuthorized(anyString())).thenReturn(true);
+        doNothing().when(facade).updateUser(any(UpdateUserRequest.class));
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/medical/users")
@@ -198,12 +197,13 @@ class UserControllerTest {
     void should_not_update_user_if_token_login_doesnt_match_with_given_login() throws Exception {
         //Given
         var userInDb = User.builder().login("testLogin22").role(Role.ROLE_USER).build();
-        var jwtToken = generateToken("testLogin", secretKey);
+        var jwtToken = generateToken("testLogin22", secretKey);
         var userRequest = UpdateUserRequest.builder().login("testLogin").personalId("98062267819").password("testPassword22@")
                 .email("email@email.com").firstName("test").lastName("testlast").build();
         var jsonRequest = new ObjectMapper().writeValueAsString(userRequest);
 
         when(userDetailsService.loadUserByUsername(anyString())).thenReturn(userInDb);
+        when(validator.isUserAuthorized(anyString())).thenReturn(false);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/medical/users")

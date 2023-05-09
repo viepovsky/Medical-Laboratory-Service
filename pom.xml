@@ -100,7 +100,7 @@
 		<dependency>
 			<groupId>io.github.viepovsky</groupId>
 			<artifactId>pesel</artifactId>
-			<version>1.0</version>
+			<version>2.0.0</version>
 		</dependency>
 	</dependencies>
 

@@ -2,7 +2,6 @@ package com.viepovsky.diagnose;
 
 import com.viepovsky.diagnose.dto.DiagnosticResultRequest;
 import com.viepovsky.diagnose.dto.DiagnosticResultResponse;
-import com.viepovsky.utilities.LoginValidator;
 import io.github.viepovsky.polishutils.pesel.InvalidPeselException;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -11,17 +10,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -35,9 +32,6 @@ class DiagnosticResultFacadeTest {
     @Mock
     private DiagnosticResultMapper mapper;
 
-    @Mock
-    private LoginValidator validator;
-
     @Test
     void should_get_all_DiagnosticResults_for_given_login() {
         //Given
@@ -46,25 +40,12 @@ class DiagnosticResultFacadeTest {
         var responseResult = DiagnosticResultResponse.builder().build();
         List<DiagnosticResultResponse> responseResults = new ArrayList<>(List.of(responseResult));
 
-        when(validator.isUserAuthorized(anyString())).thenReturn(true);
         when(service.getAllDiagnosticResults(anyString())).thenReturn(results);
         when(mapper.mapToDiagnosticResultResponseList(anyList())).thenReturn(responseResults);
         //When
-        ResponseEntity<List<DiagnosticResultResponse>> retrievedResponse = facade.getAllDiagnosticResults("login");
+        List<DiagnosticResultResponse> retrievedResponse = facade.getAllDiagnosticResults("login");
         //Then
-        assertEquals(responseResults, retrievedResponse.getBody());
-        assertEquals(HttpStatus.OK, retrievedResponse.getStatusCode());
-    }
-
-    @Test
-    void should_not_get_all_DiagnosticResults_if_token_login_doesnt_match_with_given_login() {
-        //Given
-        when(validator.isUserAuthorized(anyString())).thenReturn(false);
-        //When
-        ResponseEntity<List<DiagnosticResultResponse>> retrievedResponse = facade.getAllDiagnosticResults("login");
-        //Then
-        assertNull(retrievedResponse.getBody());
-        assertEquals(HttpStatus.FORBIDDEN, retrievedResponse.getStatusCode());
+        assertEquals(responseResults, retrievedResponse);
     }
 
     @Test
@@ -78,11 +59,9 @@ class DiagnosticResultFacadeTest {
         when(service.saveDiagnosticResult(any(DiagnosticResult.class), anyString())).thenReturn(result);
         when(mapper.mapToDiagnosticResultResponse(any(DiagnosticResult.class))).thenReturn(resultResponse);
         //When
-        ResponseEntity<DiagnosticResultResponse> retrievedResponse = facade.createDiagnosticResult(resultRequest);
+        var retrievedResponse = facade.createDiagnosticResult(resultRequest);
         //Then
-        assertNotNull(retrievedResponse.getBody());
-        assertEquals(HttpStatus.CREATED, retrievedResponse.getStatusCode());
-        assertEquals("/medical/results?login=test", retrievedResponse.getHeaders().getLocation().toString());
+        assertNotNull(retrievedResponse);
     }
 
     @Test
@@ -94,8 +73,8 @@ class DiagnosticResultFacadeTest {
         when(mapper.mapToDiagnosticResult(any(DiagnosticResultRequest.class))).thenReturn(result);
         doNothing().when(service).updateDiagnosticResult(any(DiagnosticResult.class), anyString(), anyLong());
         //When
-        ResponseEntity<Void> retrievedResponse = facade.updateDiagnosticResult(resultRequest, 5L);
+        facade.updateDiagnosticResult(resultRequest, 5L);
         //Then
-        assertEquals(HttpStatus.NO_CONTENT, retrievedResponse.getStatusCode());
+        verify(service, times(1)).updateDiagnosticResult(any(DiagnosticResult.class), anyString(), anyLong());
     }
 }

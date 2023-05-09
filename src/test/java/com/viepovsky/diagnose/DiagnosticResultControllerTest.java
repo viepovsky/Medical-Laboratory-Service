@@ -5,6 +5,7 @@ import com.viepovsky.diagnose.dto.DiagnosticResultRequest;
 import com.viepovsky.diagnose.dto.DiagnosticResultResponse;
 import com.viepovsky.user.Role;
 import com.viepovsky.user.User;
+import com.viepovsky.utilities.LoginValidator;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -17,16 +18,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.net.URI;
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -35,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -47,6 +46,9 @@ class DiagnosticResultControllerTest {
 
     @MockBean
     private DiagnosticResultFacade facade;
+
+    @MockBean
+    private LoginValidator validator;
 
     @MockBean
     private UserDetailsService userDetailsService;
@@ -80,8 +82,9 @@ class DiagnosticResultControllerTest {
         List<DiagnosticResultResponse> resultResponses = new ArrayList<>(List.of(resultResponse));
         var json = new ObjectMapper().writeValueAsString(resultResponses);
 
+        when(validator.isUserAuthorized(anyString())).thenReturn(true);
         when(userDetailsService.loadUserByUsername(anyString())).thenReturn(userInDb);
-        when(facade.getAllDiagnosticResults(anyString())).thenReturn(ResponseEntity.ok(resultResponses));
+        when(facade.getAllDiagnosticResults(anyString())).thenReturn(resultResponses);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/medical/results")
@@ -95,10 +98,10 @@ class DiagnosticResultControllerTest {
     void should_not_get_all_DiagnosticResults_if_token_login_doesnt_match_with_given_login() throws Exception {
         //Given
         var userInDb = User.builder().login("testLogin22").role(Role.ROLE_USER).build();
-        var jwtToken = generateToken("testLogin", secretKey);
+        var jwtToken = generateToken("testLogin22", secretKey);
 
+        when(validator.isUserAuthorized(anyString())).thenReturn(false);
         when(userDetailsService.loadUserByUsername(anyString())).thenReturn(userInDb);
-        when(facade.getAllDiagnosticResults(anyString())).thenReturn(ResponseEntity.status(HttpStatus.FORBIDDEN).build());
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/medical/results")
@@ -119,7 +122,7 @@ class DiagnosticResultControllerTest {
 
         when(userDetailsService.loadUserByUsername(anyString())).thenReturn(adminInDb);
         when(facade.createDiagnosticResult(any(DiagnosticResultRequest.class)))
-                .thenReturn(ResponseEntity.created(URI.create("/medical/results?login=" + resultRequest.getUserLogin())).body(resultResponse));
+                .thenReturn(resultResponse);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/medical/results")
@@ -140,7 +143,7 @@ class DiagnosticResultControllerTest {
         var jsonRequest = new ObjectMapper().writeValueAsString(resultRequest);
 
         when(userDetailsService.loadUserByUsername(anyString())).thenReturn(adminInDb);
-        when(facade.updateDiagnosticResult(any(DiagnosticResultRequest.class), anyLong())).thenReturn(ResponseEntity.noContent().build());
+        doNothing().when(facade).updateDiagnosticResult(any(DiagnosticResultRequest.class), anyLong());
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/medical/results/5")

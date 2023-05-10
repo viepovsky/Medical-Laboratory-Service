@@ -7,10 +7,12 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class UserMapperTest {
     private final UserMapper mapper = new UserMapper();
+
     @Test
     void should_map_User_to_UserDetailsResponse() {
         //Given

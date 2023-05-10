@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class ExaminationMapperTest {
@@ -36,7 +36,7 @@ class ExaminationMapperTest {
         var examination = Examination.builder().id(5L).name("Test").type(ExaminationType.BLOOD).cost(BigDecimal.valueOf(50)).build();
         List<Examination> examinations = new ArrayList<>(List.of(examination));
         //When
-        List<ExaminationResponse> mappedExaminations= mapper.mapToExaminationResponseList(examinations);
+        List<ExaminationResponse> mappedExaminations = mapper.mapToExaminationResponseList(examinations);
         //Then
         assertThat(mappedExaminations).isNotNull();
         assertEquals(examinations.size(), mappedExaminations.size());

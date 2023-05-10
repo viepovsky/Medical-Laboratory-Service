@@ -42,7 +42,7 @@ class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             userLogin = jwtService.extractUserLogin(jwt);
         } catch (MalformedJwtException exception) {
-           logger.error("MalformedJwtException thrown, exception message: " + exception.getMessage());
+            logger.error("MalformedJwtException thrown, exception message: " + exception.getMessage());
             filterChain.doFilter(request, response);
             return;
         } catch (ExpiredJwtException exception) {

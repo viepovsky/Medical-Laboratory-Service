@@ -1,8 +1,8 @@
 package com.viepovsky.user;
 
+import com.viepovsky.user.dto.request.RegisterUserRequest;
 import com.viepovsky.user.dto.request.UpdateUserRequest;
 import com.viepovsky.user.dto.response.CreatedUserResponse;
-import com.viepovsky.user.dto.request.RegisterUserRequest;
 import com.viepovsky.user.dto.response.DetailsUserResponse;
 import org.springframework.stereotype.Service;
 

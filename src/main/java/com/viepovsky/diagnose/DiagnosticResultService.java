@@ -15,7 +15,8 @@ class DiagnosticResultService {
     private final DiagnosticResultRepository repository;
     private final UserService service;
 
-    @Transactional //HACK: @Transactional must be here due to not throwing exceptions during fetching pdfs.
+    @Transactional
+        //HACK: @Transactional must be here due to not throwing exceptions during fetching pdfs.
     List<DiagnosticResult> getAllDiagnosticResults(String login) {
         return repository.getDiagnosticResultByUser_Login(login);
     }

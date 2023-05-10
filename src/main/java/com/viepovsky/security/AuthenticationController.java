@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 class AuthenticationController {
     private final AuthenticationService service;
+
     @PostMapping("/register")
     ResponseEntity<AuthenticationResponse> register(@RequestBody @Valid RegisterUserRequest request) throws InvalidPeselException {
         return ResponseEntity.ok(service.register(request));

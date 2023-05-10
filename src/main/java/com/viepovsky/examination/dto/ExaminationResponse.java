@@ -4,6 +4,7 @@ import com.viepovsky.examination.ExaminationType;
 import lombok.*;
 
 import java.math.BigDecimal;
+
 @Getter
 @Setter
 @Builder

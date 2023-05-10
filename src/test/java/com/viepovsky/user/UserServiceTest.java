@@ -109,6 +109,7 @@ class UserServiceTest {
         //Then
         verify(repository, times(1)).save(any(User.class));
     }
+
     @Test
     void should_not_update_user_if_password_is_invalid() {
         //Given

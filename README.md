@@ -2,15 +2,13 @@
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/viepovsky/Medical-Laboratory-Service/maven.yml?style=plastic)](https://github.com/viepovsky/Medical-Laboratory-Service/actions/workflows/maven.yml)
 [![Codecov test coverage](https://img.shields.io/codecov/c/github/viepovsky/Medical-Laboratory-Service?style=plastic)](https://codecov.io/gh/viepovsky/Medical-Laboratory-Service)
 
-## 1. Description
-
 Medical Laboratory Service is a secure **RESTful** application that allows patients to access their laboratory test results online. 
 The application's endpoints are protected using JSON Web Tokens, ensuring that only authorized users can access sensitive medical data. 
 The application stores user personal data, as well as diagnostic results. Users after authorization can simply view and download their results online. 
 In addition, the application allows patients to browse available examinations that are offered by the laboratory. 
 This application is specifically designed to be used by medical laboratories.
 
-## 2. Technnologies
+## Technnologies
 
 The application currently uses the following frameworks and technologies: 
 
@@ -26,7 +24,7 @@ The application currently uses the following frameworks and technologies:
 
 In this service I have used my own PESEL validation library to ensure the correctness of PESEL numbers. The library has been published on Maven Central Repository and is accessible for everyone to use. You can check out the library's code [**here**](https://github.com/viepovsky/PESEL).
 
-## 3. How to run
+## How to run
 
 To run the application, you need to have `Postgres` installed. You can create a database named `medical`, or use a different one by updating the configuration in `application.yml`. Make sure to also check the username and password for the database.
 
@@ -38,11 +36,11 @@ Once the application is running, you can test it by sending requests to the endp
 
 Keep in mind that the application is secured with JWT token. To access the endpoints, you need to either register a new user at `http://localhost:8080/medical/auth/register`, or use the provided test user with user privileges (login: `testuser`, password: `testpassword`) or the test admin user (login: `testadmin`, password: `testpassword`).
 
-## 4. Future plans for the application
+## Future plans for the application
 
 Next, I plan to add user and admin views to the application using HTML, CSS, and JavaScript.
 
-## 5. Screenshots
+## Screenshots
 
 ![Swagger screenshot](src/main/resources/screenshots/swagger.jpg)
 

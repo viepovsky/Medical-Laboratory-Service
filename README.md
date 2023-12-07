@@ -106,6 +106,7 @@ for example `http://localhost:8080/medical/results/501?login=testuser`
 Don't forget to put authentication code that you have received before for the `testuser` as `Bearer Token`
 
 In response you should receive a dummy PDF file, as shown below:
+![Postman screenshot](src/main/resources/screenshots/dummy-pdf.JPG)
 
 ## Screenshots
 

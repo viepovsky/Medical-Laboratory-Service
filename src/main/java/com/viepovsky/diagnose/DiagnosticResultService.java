@@ -21,6 +21,13 @@ class DiagnosticResultService {
         return repository.getDiagnosticResultByUser_Login(login);
     }
 
+    byte[] getDiagnosticResultPdf(Long id, String login) {
+        var diagnosticResults = repository.getDiagnosticResultByIdAndUser_Login(id, login)
+                .orElseThrow(() -> new EntityNotFoundException("DiagnosticResult with id: " + id + " for user login: "
+                        + login + " does not exist in database."));
+        return diagnosticResults.getResultsPdf();
+    }
+
     DiagnosticResult saveDiagnosticResult(DiagnosticResult result, String login) throws InvalidPeselException {
         var retrievedUser = service.getUserByLogin(login);
         result.setUser(retrievedUser);

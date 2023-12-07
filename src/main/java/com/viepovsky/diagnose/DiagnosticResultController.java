@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -26,11 +27,23 @@ class DiagnosticResultController {
     private final LoginValidator validator;
 
     @GetMapping
-    ResponseEntity<List<DiagnosticResultResponse>> getAllDiagnosticResults(@RequestParam(name = "login") @NotBlank String login) {
+    ResponseEntity<List<DiagnosticResultResponse>> getAllDiagnosticResultsDetails(@RequestParam(name = "login") @NotBlank String login) {
         if (!validator.isUserAuthorized(login)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         return ResponseEntity.ok(facade.getAllDiagnosticResults(login));
+    }
+
+    @GetMapping(
+            value = "{id}",
+            produces = MediaType.APPLICATION_PDF_VALUE)
+    ResponseEntity<byte[]> getDiagnosticResultPdf(
+            @PathVariable(name = "id") @Min(1) Long id,
+            @RequestParam(name = "login") @NotBlank String login) {
+        if (!validator.isUserAuthorized(login)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        return ResponseEntity.ok(facade.getDiagnosticResultPdf(id, login));
     }
 
     @PreAuthorize("hasRole('ADMIN')")

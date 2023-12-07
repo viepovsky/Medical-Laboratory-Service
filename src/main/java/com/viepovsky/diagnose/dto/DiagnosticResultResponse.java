@@ -17,6 +17,4 @@ public class DiagnosticResultResponse {
     private String status;
 
     private LocalDateTime registration;
-
-    private byte[] resultsPdf;
 }

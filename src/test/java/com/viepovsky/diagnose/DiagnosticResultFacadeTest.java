@@ -49,6 +49,16 @@ class DiagnosticResultFacadeTest {
     }
 
     @Test
+    void should_get_DiagnosticResults_PDF() {
+        byte[] resultResponse = {10, 1, 22, 0, 5};
+        when(service.getDiagnosticResultPdf(anyLong(), anyString())).thenReturn(resultResponse);
+
+        byte[] retrievedResponse = facade.getDiagnosticResultPdf(1L, "testlogin");
+
+        assertEquals(resultResponse, retrievedResponse);
+    }
+
+    @Test
     void should_create_DiagnosticResult() throws InvalidPeselException {
         //Given
         var resultRequest = DiagnosticResultRequest.builder().status(DiagnosticStatus.AWAITING_RESULT).registration(LocalDateTime.now()).userLogin("test").type(DiagnosticType.BLOOD).resultsPdf(new byte[]{}).build();

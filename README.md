@@ -91,6 +91,22 @@ With body:
 ```
 You will receive in response authorization token, keep it.
 
+4. Get all diagnostic results for USER(testuser)
+
+GET to `http://localhost:8080/medical/results` with parameter `login`
+for example `http://localhost:8080/medical/results?login=testuser`
+Don't forget to put authentication code that you have received before for the `testuser` as `Bearer Token`
+
+In response you will receive a list of diagnostic results, keep the listed ID.
+
+5. Get PDF for diagnostic result for USER(testuser)
+
+GET to `http://localhost:8080/medical/results/{id}` with parameter `login`
+for example `http://localhost:8080/medical/results/501?login=testuser`
+Don't forget to put authentication code that you have received before for the `testuser` as `Bearer Token`
+
+In response you should receive a dummy PDF file, as shown below:
+
 ## Screenshots
 
 ![Swagger screenshot](src/main/resources/screenshots/swagger.jpg)

@@ -1,0 +1,52 @@
+services:
+  medical-service:
+    container_name: medical-service
+    image: viepovsky/medical-laboratory-service:latest
+    environment:
+      - MEDICAL_SECRET_KEY=4D6251655468576D5A7134743777217A25432A462D4A614E645266556A586E32
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - 8080:8080
+    networks:
+      - medical-laboratory
+    depends_on:
+      - db_postgres
+    restart: unless-stopped
+
+  db_postgres:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: viepovsky
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: medical
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    networks:
+      - medical-laboratory
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: viepovsky@viepovsky.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - 5050:80
+    networks:
+      - medical-laboratory
+    depends_on:
+      - db_postgres
+    restart: unless-stopped
+
+networks:
+  medical-laboratory:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:

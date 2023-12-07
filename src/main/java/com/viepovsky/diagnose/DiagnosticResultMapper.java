@@ -13,8 +13,7 @@ class DiagnosticResultMapper {
                 result.getId(),
                 result.getType().toString(),
                 result.getStatus().toString(),
-                result.getRegistration(),
-                result.getResultsPdf()
+                result.getRegistration()
         );
     }
 

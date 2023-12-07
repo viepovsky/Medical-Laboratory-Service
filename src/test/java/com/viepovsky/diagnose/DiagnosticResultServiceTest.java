@@ -3,6 +3,7 @@ package com.viepovsky.diagnose;
 import com.viepovsky.user.User;
 import com.viepovsky.user.UserService;
 import io.github.viepovsky.polishutils.pesel.InvalidPeselException;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
@@ -58,6 +60,25 @@ class DiagnosticResultServiceTest {
         //Then
         assertThat(retrievedResult).isNotNull();
         assertEquals(result.getType(), retrievedResult.getType());
+    }
+
+    @Test
+    void should_get_DiagnosticResult_PDF() {
+        byte[] resultResponse = {10, 1, 22, 0, 5};
+        var user = User.builder().login("testuser").build();
+        DiagnosticResult diagnosticResult = DiagnosticResult.builder().id(1L).user(user).resultsPdf(resultResponse).build();
+
+        when(repository.getDiagnosticResultByIdAndUser_Login(1L, "testuser")).thenReturn(Optional.ofNullable(diagnosticResult));
+
+        byte[] retrievedResult = diagnosticResultService.getDiagnosticResultPdf(1L, "testuser");
+        assertEquals(resultResponse, retrievedResult);
+    }
+
+    @Test
+    void should_throw_exception_when_get_DiagnosticResult_PDF_with_invalid_id() {
+        when(repository.getDiagnosticResultByIdAndUser_Login(anyLong(), anyString())).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> diagnosticResultService.getDiagnosticResultPdf(1L, "testuser"));
     }
 
     @Test

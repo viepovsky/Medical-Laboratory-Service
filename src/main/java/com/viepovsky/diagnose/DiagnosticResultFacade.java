@@ -23,6 +23,11 @@ class DiagnosticResultFacade {
         return mapper.mapToDiagnosticResultResponseList(results);
     }
 
+    byte[] getDiagnosticResultPdf(Long id, String login) {
+        logger.info("Fetching pdf from diagnostic results of id:{} for user with login:{}", id, login);
+        return service.getDiagnosticResultPdf(id, login);
+    }
+
     DiagnosticResultResponse createDiagnosticResult(DiagnosticResultRequest request) throws InvalidPeselException {
         logger.info("createDiagnosticResult endpoint used");
         var toSave = mapper.mapToDiagnosticResult(request);

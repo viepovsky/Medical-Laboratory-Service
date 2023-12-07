@@ -30,7 +30,6 @@ public class DiagnosticResult extends BaseEntityAudit {
 
     private LocalDateTime registration;
 
-    @Lob
     private byte[] resultsPdf;
 
     @ManyToOne(fetch = FetchType.EAGER)

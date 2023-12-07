@@ -1,0 +1,3 @@
+ALTER TABLE diagnostic_results ADD COLUMN status VARCHAR NULL;
+ALTER TABLE diagnostic_results ALTER COLUMN type SET DATA TYPE VARCHAR;
+

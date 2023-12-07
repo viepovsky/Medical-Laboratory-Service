@@ -111,13 +111,47 @@ class DiagnosticResultControllerTest {
     }
 
     @Test
+    void should_get_DiagnostiCResults_PDF() throws Exception {
+        var userInDb = User.builder().login("testLogin").role(Role.ROLE_USER).build();
+        var jwtToken = generateToken("testLogin", secretKey);
+        byte[] resultResponse = {10, 1, 22, 0, 5};
+
+        when(validator.isUserAuthorized(anyString())).thenReturn(true);
+        when(userDetailsService.loadUserByUsername(anyString())).thenReturn(userInDb);
+        when(facade.getDiagnosticResultPdf(anyLong(), anyString())).thenReturn(resultResponse);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/medical/results/1")
+                        .param("login", "testLogin")
+                        .header("Authorization", "Bearer " + jwtToken))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().bytes(resultResponse));
+    }
+
+    @Test
+    void should_not_get_DiagnostiCResults_PDF_if_token_login_doesnt_match_with_given_login() throws Exception {
+        //Given
+        var userInDb = User.builder().login("testLogin22").role(Role.ROLE_USER).build();
+        var jwtToken = generateToken("testLogin22", secretKey);
+
+        when(validator.isUserAuthorized(anyString())).thenReturn(false);
+        when(userDetailsService.loadUserByUsername(anyString())).thenReturn(userInDb);
+        //When & then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/medical/results/1")
+                        .param("login", "testLogin22")
+                        .header("Authorization", "Bearer " + jwtToken))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
+    @Test
     void should_create_DiagnosticResult() throws Exception {
         //Given
         var adminInDb = User.builder().login("testAdmin").role(Role.ROLE_ADMIN).build();
         var jwtToken = generateToken("testAdmin", secretKey);
         var resultRequest = DiagnosticResultRequest.builder().status(DiagnosticStatus.AWAITING_RESULT).registration(LocalDateTime.now()).userLogin("test").type(DiagnosticType.BLOOD).resultsPdf(new byte[]{}).build();
         var jsonRequest = new ObjectMapper().writeValueAsString(resultRequest);
-        var resultResponse = DiagnosticResultResponse.builder().status("AWAITING_RESULT").type("BLOOD").resultsPdf(new byte[]{}).build();
+        var resultResponse = DiagnosticResultResponse.builder().status("AWAITING_RESULT").type("BLOOD").build();
         var jsonResponse = new ObjectMapper().writeValueAsString(resultResponse);
 
         when(userDetailsService.loadUserByUsername(anyString())).thenReturn(adminInDb);

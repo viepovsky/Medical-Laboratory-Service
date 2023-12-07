@@ -1,14 +1,14 @@
-drop table if exists examinations CASCADE;
-create table examinations(
-    id SERIAL primary key,
-    name varchar not null ,
-    type smallint not null ,
-    short_description varchar not null ,
-    long_description varchar,
-    cost numeric not null,
-    created_on timestamp,
-    updated_on timestamp
+DROP TABLE IF EXISTS examinations CASCADE;
+CREATE TABLE examinations(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR NOT NULL,
+    type SMALLINT NOT NULL,
+    short_description VARCHAR NOT NULL,
+    long_description VARCHAR,
+    cost NUMERIC(10,2) NOT NULL ,
+    created_on TIMESTAMP,
+    updated_on TIMESTAMP
 );
 
-drop sequence if exists examinations_seq;
-create sequence examinations_seq start with 500 increment by 1 no maxvalue;
+DROP SEQUENCE IF EXISTS examinations_seq;
+CREATE SEQUENCE examinations_seq START WITH 500 INCREMENT BY 1 NO MAXVALUE;

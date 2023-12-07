@@ -53,7 +53,7 @@ class DiagnosticResultFacadeTest {
         //Given
         var resultRequest = DiagnosticResultRequest.builder().status(DiagnosticStatus.AWAITING_RESULT).registration(LocalDateTime.now()).userLogin("test").type(DiagnosticType.BLOOD).resultsPdf(new byte[]{}).build();
         var result = DiagnosticResult.builder().build();
-        var resultResponse = DiagnosticResultResponse.builder().status("AWAITING_RESULT").type("BLOOD").resultsPdf(new byte[]{}).build();
+        var resultResponse = DiagnosticResultResponse.builder().status("AWAITING_RESULT").type("BLOOD").build();
 
         when(mapper.mapToDiagnosticResult(any(DiagnosticResultRequest.class))).thenReturn(result);
         when(service.saveDiagnosticResult(any(DiagnosticResult.class), anyString())).thenReturn(result);

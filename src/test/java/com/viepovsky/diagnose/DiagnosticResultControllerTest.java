@@ -117,7 +117,7 @@ class DiagnosticResultControllerTest {
         var jwtToken = generateToken("testAdmin", secretKey);
         var resultRequest = DiagnosticResultRequest.builder().status(DiagnosticStatus.AWAITING_RESULT).registration(LocalDateTime.now()).userLogin("test").type(DiagnosticType.BLOOD).resultsPdf(new byte[]{}).build();
         var jsonRequest = new ObjectMapper().writeValueAsString(resultRequest);
-        var resultResponse = DiagnosticResultResponse.builder().status("AWAITING_RESULT").type("BLOOD").resultsPdf(new byte[]{}).build();
+        var resultResponse = DiagnosticResultResponse.builder().status("AWAITING_RESULT").type("BLOOD").build();
         var jsonResponse = new ObjectMapper().writeValueAsString(resultResponse);
 
         when(userDetailsService.loadUserByUsername(anyString())).thenReturn(adminInDb);

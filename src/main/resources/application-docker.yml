@@ -1,0 +1,26 @@
+# DATABASE CONFIGURATION
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/medical
+    username: viepovsky
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: false
+  flyway:
+    baseline-on-migrate: true
+
+#SECURITY, AUTHORIZATION
+jwt:
+  secret:
+    key: ${MEDICAL_SECRET_KEY}
+
+# VALIDATION
+server:
+  error:
+    include-message: always
+#    include-binding-errors: always

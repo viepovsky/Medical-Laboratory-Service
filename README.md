@@ -8,6 +8,8 @@ The application stores user personal data, as well as diagnostic results. Users 
 In addition, the application allows patients to browse available examinations that are offered by the laboratory. 
 This application is specifically designed to be used by medical laboratories.
 
+##### Note: This is a backend of such service.
+
 ## Technnologies
 
 The application currently uses the following frameworks and technologies: 

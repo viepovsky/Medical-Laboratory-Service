@@ -13,31 +13,31 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 class DiagnosticResultFacade {
-    private static final Logger logger = LoggerFactory.getLogger(DiagnosticResultFacade.class);
-    private final DiagnosticResultService service;
+    private static final Logger LOGGER = LoggerFactory.getLogger(DiagnosticResultFacade.class);
+    private final DiagnosticResultService diagnosticResultService;
     private final DiagnosticResultMapper mapper;
 
     List<DiagnosticResultResponse> getAllDiagnosticResults(String login) {
-        logger.info("getAllDIagnosticResults endpoint used with login value: " + login);
-        List<DiagnosticResult> results = service.getAllDiagnosticResults(login);
+        LOGGER.info("Get all diagnostic results for user login:{}", login);
+        List<DiagnosticResult> results = diagnosticResultService.getAllDiagnosticResultsByUserLogin(login);
         return mapper.mapToDiagnosticResultResponseList(results);
     }
 
     byte[] getDiagnosticResultPdf(Long id, String login) {
-        logger.info("Fetching pdf from diagnostic results of id:{} for user with login:{}", id, login);
-        return service.getDiagnosticResultPdf(id, login);
+        LOGGER.info("Fetching pdf from diagnostic results of id:{} for user with login:{}", id, login);
+        return diagnosticResultService.getDiagnosticResultPdfByIdAndUserLogin(id, login);
     }
 
     DiagnosticResultResponse createDiagnosticResult(DiagnosticResultRequest request) throws InvalidPeselException {
-        logger.info("createDiagnosticResult endpoint used");
+        LOGGER.info("Create diagnostic result for user login:{}", request.getUserLogin());
         var toSave = mapper.mapToDiagnosticResult(request);
-        var savedResult = service.saveDiagnosticResult(toSave, request.getUserLogin());
+        var savedResult = diagnosticResultService.saveDiagnosticResult(toSave, request.getUserLogin());
         return mapper.mapToDiagnosticResultResponse(savedResult);
     }
 
     void updateDiagnosticResult(DiagnosticResultRequest request, Long resultId) {
-        logger.info("updateDiagnosticResult endpoint used");
+        LOGGER.info("Update diagnostic result with if of:{}", resultId);
         var toUpdate = mapper.mapToDiagnosticResult(request);
-        service.updateDiagnosticResult(toUpdate, request.getUserLogin(), resultId);
+        diagnosticResultService.updateDiagnosticResult(toUpdate, request.getUserLogin(), resultId);
     }
 }

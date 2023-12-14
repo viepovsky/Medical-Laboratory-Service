@@ -20,30 +20,30 @@ import java.util.List;
 @RequestMapping("/medical/examinations")
 @Validated
 class ExaminationController {
-    private static final Logger logger = LoggerFactory.getLogger(ExaminationController.class);
-    private final ExaminationService service;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExaminationController.class);
+    private final ExaminationService examinationService;
     private final ExaminationMapper mapper;
 
     @GetMapping
     ResponseEntity<List<ExaminationResponse>> getAllExaminations() {
-        logger.info("getAllExaminations endpoint used");
-        List<Examination> examinations = service.getAllExaminations();
+        LOGGER.info("Get all examinations endpoint used.");
+        List<Examination> examinations = examinationService.getAllExaminations();
         return ResponseEntity.ok(mapper.mapToExaminationResponseList(examinations));
     }
 
     @GetMapping("/{id}")
     ResponseEntity<ExaminationResponse> getExamination(@PathVariable @Min(1) Long id) {
-        logger.info("getExamination endpoint used with id value: " + id);
-        Examination examination = service.getExamination(id);
+        LOGGER.info("Get examination endpoint used with id:{}", id);
+        Examination examination = examinationService.getExamination(id);
         return ResponseEntity.ok(mapper.mapToExaminationResponse(examination));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     ResponseEntity<ExaminationResponse> saveExamination(@RequestBody @Valid ExaminationRequest request) {
-        logger.info("createExamination endpoint used with body: " + request.toString());
+        LOGGER.info("Create examination endpoint used with examination name:{}", request.getName());
         Examination toSave = mapper.mapToExamination(request);
-        ExaminationResponse saved = mapper.mapToExaminationResponse(service.saveExamination(toSave));
+        ExaminationResponse saved = mapper.mapToExaminationResponse(examinationService.saveExamination(toSave));
         return ResponseEntity.created(URI.create("/medical/examinations/" + saved.getId())).body(saved);
     }
 
@@ -53,17 +53,18 @@ class ExaminationController {
             @PathVariable @Min(1) Long id,
             @RequestBody @Valid ExaminationRequest request
     ) {
-        logger.info("updateExamination endpoint used with id: " + id + " and body: " + request.toString());
+        LOGGER.info("Update examination endpoint used with id:{}", id);
         Examination examination = mapper.mapToExamination(request);
         examination.setId(id);
-        service.updateExamination(examination);
+        examinationService.updateExamination(examination);
         return ResponseEntity.noContent().build();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteExamination(@PathVariable @Min(1) Long id) {
-        service.deleteExamination(id);
+        LOGGER.info("Delete examination endpoint used for id:{}", id);
+        examinationService.deleteExamination(id);
         return ResponseEntity.ok().build();
     }
 }

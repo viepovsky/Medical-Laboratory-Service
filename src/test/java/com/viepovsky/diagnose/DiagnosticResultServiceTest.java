@@ -41,7 +41,7 @@ class DiagnosticResultServiceTest {
         List<DiagnosticResult> results = new ArrayList<>(List.of(result));
         when(repository.getDiagnosticResultByUser_Login(anyString())).thenReturn(results);
         //When
-        List<DiagnosticResult> retrievedResults = diagnosticResultService.getAllDiagnosticResults("test");
+        List<DiagnosticResult> retrievedResults = diagnosticResultService.getAllDiagnosticResultsByUserLogin("test");
         //Then
         assertThat(retrievedResults).isNotNull();
         assertEquals(1, retrievedResults.size());
@@ -70,7 +70,7 @@ class DiagnosticResultServiceTest {
 
         when(repository.getDiagnosticResultByIdAndUser_Login(1L, "testuser")).thenReturn(Optional.ofNullable(diagnosticResult));
 
-        byte[] retrievedResult = diagnosticResultService.getDiagnosticResultPdf(1L, "testuser");
+        byte[] retrievedResult = diagnosticResultService.getDiagnosticResultPdfByIdAndUserLogin(1L, "testuser");
         assertEquals(resultResponse, retrievedResult);
     }
 
@@ -78,7 +78,7 @@ class DiagnosticResultServiceTest {
     void should_throw_exception_when_get_DiagnosticResult_PDF_with_invalid_id() {
         when(repository.getDiagnosticResultByIdAndUser_Login(anyLong(), anyString())).thenReturn(Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> diagnosticResultService.getDiagnosticResultPdf(1L, "testuser"));
+        assertThrows(EntityNotFoundException.class, () -> diagnosticResultService.getDiagnosticResultPdfByIdAndUserLogin(1L, "testuser"));
     }
 
     @Test

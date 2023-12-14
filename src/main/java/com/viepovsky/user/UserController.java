@@ -23,31 +23,31 @@ import java.net.URI;
 @RequiredArgsConstructor
 @Validated
 class UserController {
-    private final UserFacade facade;
-    private final LoginValidator validator;
+    private final UserFacade userFacade;
+    private final LoginValidator loginValidator;
 
     @GetMapping
     ResponseEntity<DetailsUserResponse> getUserByLogin(@RequestParam(name = "login") @NotBlank String login) {
-        if (!validator.isUserAuthorized(login)) {
+        if (!loginValidator.isUserAuthorized(login)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        var userDetails = facade.getUserByLogin(login);
+        var userDetails = userFacade.getUserByLogin(login);
         return ResponseEntity.ok(userDetails);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     ResponseEntity<CreatedUserResponse> createUser(@RequestBody @Valid RegisterUserRequest request) throws InvalidPeselException {
-        var result = facade.createUser(request);
+        var result = userFacade.createUser(request);
         return ResponseEntity.created(URI.create("/medical/users?login=" + result.getLogin())).body(result);
     }
 
     @PutMapping
     ResponseEntity<Void> updateUser(@RequestBody @Valid UpdateUserRequest request) throws PasswordValidationException, InvalidPeselException {
-        if (!validator.isUserAuthorized(request.getLogin())) {
+        if (!loginValidator.isUserAuthorized(request.getLogin())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        facade.updateUser(request);
+        userFacade.updateUser(request);
         return ResponseEntity.noContent().build();
     }
 }

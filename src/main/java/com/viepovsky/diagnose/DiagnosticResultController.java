@@ -23,15 +23,15 @@ import java.util.List;
 @RequestMapping(path = "/medical/results")
 @Validated
 class DiagnosticResultController {
-    private final DiagnosticResultFacade facade;
-    private final LoginValidator validator;
+    private final DiagnosticResultFacade diagnosticResultFacade;
+    private final LoginValidator loginValidator;
 
     @GetMapping
     ResponseEntity<List<DiagnosticResultResponse>> getAllDiagnosticResultsDetails(@RequestParam(name = "login") @NotBlank String login) {
-        if (!validator.isUserAuthorized(login)) {
+        if (!loginValidator.isUserAuthorized(login)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        return ResponseEntity.ok(facade.getAllDiagnosticResults(login));
+        return ResponseEntity.ok(diagnosticResultFacade.getAllDiagnosticResults(login));
     }
 
     @GetMapping(
@@ -40,16 +40,16 @@ class DiagnosticResultController {
     ResponseEntity<byte[]> getDiagnosticResultPdf(
             @PathVariable(name = "id") @Min(1) Long id,
             @RequestParam(name = "login") @NotBlank String login) {
-        if (!validator.isUserAuthorized(login)) {
+        if (!loginValidator.isUserAuthorized(login)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        return ResponseEntity.ok(facade.getDiagnosticResultPdf(id, login));
+        return ResponseEntity.ok(diagnosticResultFacade.getDiagnosticResultPdf(id, login));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     ResponseEntity<DiagnosticResultResponse> createDiagnosticResult(@RequestBody @Valid DiagnosticResultRequest request) throws InvalidPeselException {
-        var result = facade.createDiagnosticResult(request);
+        var result = diagnosticResultFacade.createDiagnosticResult(request);
         return ResponseEntity.created(URI.create("/medical/results?login=" + request.getUserLogin())).body(result);
     }
 
@@ -58,7 +58,7 @@ class DiagnosticResultController {
     ResponseEntity<Void> updateDiagnosticResult(
             @RequestBody @Valid DiagnosticResultRequest request,
             @PathVariable @Min(1) Long id) {
-        facade.updateDiagnosticResult(request, id);
+        diagnosticResultFacade.updateDiagnosticResult(request, id);
         return ResponseEntity.noContent().build();
     }
 }

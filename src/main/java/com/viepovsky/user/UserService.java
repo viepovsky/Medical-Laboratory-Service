@@ -12,25 +12,27 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final UserRepository repository;
+    private final UserRepository userRepository;
 
     public User getUserByLogin(String login) {
-        return repository.findByLogin(login).orElseThrow(() -> new EntityNotFoundException("User with login: " + login + " does not exist in database."));
+        return userRepository.findByLogin(login)
+                .orElseThrow(() -> new EntityNotFoundException("User with login: " + login + " does not exist in database."));
     }
 
     public User createUser(User user) throws InvalidPeselException {
         PeselValidator.assertIsValid(user.getPersonalId());
-        if (repository.existsByLogin(user.getLogin())) {
+        if (userRepository.existsByLogin(user.getLogin())) {
             throw new EntityExistsException("User with login: " + user.getLogin() + " already exists in database.");
         }
-        return repository.save(user);
+        return userRepository.save(user);
     }
 
     public void updateUser(User user) throws InvalidPeselException {
         PeselValidator.assertIsValid(user.getPersonalId());
-        var retrievedUser = repository.findByLogin(user.getLogin()).orElseThrow(() -> new EntityNotFoundException("User with login: " + user.getLogin() + " does not exist in database."));
+        var retrievedUser = userRepository.findByLogin(user.getLogin())
+                .orElseThrow(() -> new EntityNotFoundException("User with login: " + user.getLogin() + " does not exist in database."));
         retrievedUser.updateFrom(user);
-        repository.save(retrievedUser);
+        userRepository.save(retrievedUser);
     }
 
     void updateUserWithPassword(User user) throws PasswordValidationException, InvalidPeselException {

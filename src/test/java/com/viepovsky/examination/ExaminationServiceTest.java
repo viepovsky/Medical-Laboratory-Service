@@ -97,18 +97,18 @@ class ExaminationServiceTest {
     @Test
     void should_delete_Examination() {
         //Given
-        var examination = Examination.builder().id(5L).name("Test").build();
-        when(repository.findById(anyLong())).thenReturn(Optional.of(examination));
+        when(repository.existsById(anyLong())).thenReturn(true);
+        doNothing().when(repository).deleteById(anyLong());
         //When
-        service.deleteExamination(examination.getId());
+        service.deleteExamination(5L);
         //Then
-        verify(repository, times(1)).delete(any(Examination.class));
+        verify(repository, times(1)).deleteById(anyLong());
     }
 
     @Test
     void should_not_delete_Examination_if_given_id_doesnt_exist() {
         //Given
-        when(repository.findById(anyLong())).thenReturn(Optional.empty());
+        when(repository.existsById(anyLong())).thenReturn(false);
         //When & then
         assertThrows(EntityNotFoundException.class, () -> service.deleteExamination(5L));
     }

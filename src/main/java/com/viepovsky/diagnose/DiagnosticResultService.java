@@ -5,42 +5,41 @@ import io.github.viepovsky.polishutils.pesel.InvalidPeselException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 class DiagnosticResultService {
-    private final DiagnosticResultRepository repository;
-    private final UserService service;
+    private final DiagnosticResultRepository diagnosticResultRepository;
+    private final UserService userService;
 
-    @Transactional
-        //HACK: @Transactional must be here due to not throwing exceptions during fetching pdfs.
-    List<DiagnosticResult> getAllDiagnosticResults(String login) {
-        return repository.getDiagnosticResultByUser_Login(login);
+    List<DiagnosticResult> getAllDiagnosticResultsByUserLogin(String login) {
+        return diagnosticResultRepository.getDiagnosticResultByUser_Login(login);
     }
 
-    byte[] getDiagnosticResultPdf(Long id, String login) {
-        var diagnosticResults = repository.getDiagnosticResultByIdAndUser_Login(id, login)
+    byte[] getDiagnosticResultPdfByIdAndUserLogin(Long id, String login) {
+        var diagnosticResults = diagnosticResultRepository.getDiagnosticResultByIdAndUser_Login(id, login)
                 .orElseThrow(() -> new EntityNotFoundException("DiagnosticResult with id: " + id + " for user login: "
                         + login + " does not exist in database."));
         return diagnosticResults.getResultsPdf();
     }
 
     DiagnosticResult saveDiagnosticResult(DiagnosticResult result, String login) throws InvalidPeselException {
-        var retrievedUser = service.getUserByLogin(login);
+        var retrievedUser = userService.getUserByLogin(login);
         result.setUser(retrievedUser);
         retrievedUser.getResultsList().add(result);
-        service.updateUser(retrievedUser);
-        return repository.save(result);
+        userService.updateUser(retrievedUser);
+        return diagnosticResultRepository.save(result);
     }
 
     void updateDiagnosticResult(DiagnosticResult result, String login, Long resultId) {
-        var resultToUpdate = repository.findById(resultId).orElseThrow(() -> new EntityNotFoundException("DiagnosticResult with id: " + resultId + " does not exist in database."));
-        var user = service.getUserByLogin(login);
+        var resultToUpdate = diagnosticResultRepository.findById(resultId)
+                .orElseThrow(() -> new EntityNotFoundException("DiagnosticResult with id: "
+                        + resultId + " does not exist in database."));
+        var user = userService.getUserByLogin(login);
         resultToUpdate.updateFrom(result);
         resultToUpdate.setUser(user);
-        repository.save(resultToUpdate);
+        diagnosticResultRepository.save(resultToUpdate);
     }
 }

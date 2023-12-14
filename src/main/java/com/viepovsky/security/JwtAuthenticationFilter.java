@@ -25,7 +25,7 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
@@ -42,19 +42,19 @@ class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             userLogin = jwtService.extractUserLogin(jwt);
         } catch (MalformedJwtException exception) {
-            logger.error("MalformedJwtException thrown, exception message: " + exception.getMessage());
+            LOGGER.error("MalformedJwtException thrown, exception message: " + exception.getMessage());
             filterChain.doFilter(request, response);
             return;
         } catch (ExpiredJwtException exception) {
-            logger.error("ExpiredJwtException thrown, exception message: " + exception.getMessage());
+            LOGGER.error("ExpiredJwtException thrown, exception message: " + exception.getMessage());
             filterChain.doFilter(request, response);
             return;
         } catch (SignatureException exception) {
-            logger.error("SignatureException thrown, exception message: " + exception.getMessage());
+            LOGGER.error("SignatureException thrown, exception message: " + exception.getMessage());
             filterChain.doFilter(request, response);
             return;
         } catch (DecodingException exception) {
-            logger.error("DecodingException thrown, exception message: " + exception.getMessage());
+            LOGGER.error("DecodingException thrown, exception message: " + exception.getMessage());
             filterChain.doFilter(request, response);
             return;
         }

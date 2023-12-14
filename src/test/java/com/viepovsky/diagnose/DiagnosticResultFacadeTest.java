@@ -40,7 +40,7 @@ class DiagnosticResultFacadeTest {
         var responseResult = DiagnosticResultResponse.builder().build();
         List<DiagnosticResultResponse> responseResults = new ArrayList<>(List.of(responseResult));
 
-        when(service.getAllDiagnosticResults(anyString())).thenReturn(results);
+        when(service.getAllDiagnosticResultsByUserLogin(anyString())).thenReturn(results);
         when(mapper.mapToDiagnosticResultResponseList(anyList())).thenReturn(responseResults);
         //When
         List<DiagnosticResultResponse> retrievedResponse = facade.getAllDiagnosticResults("login");
@@ -51,7 +51,7 @@ class DiagnosticResultFacadeTest {
     @Test
     void should_get_DiagnosticResults_PDF() {
         byte[] resultResponse = {10, 1, 22, 0, 5};
-        when(service.getDiagnosticResultPdf(anyLong(), anyString())).thenReturn(resultResponse);
+        when(service.getDiagnosticResultPdfByIdAndUserLogin(anyLong(), anyString())).thenReturn(resultResponse);
 
         byte[] retrievedResponse = facade.getDiagnosticResultPdf(1L, "testlogin");
 

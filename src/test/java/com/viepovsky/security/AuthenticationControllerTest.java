@@ -36,8 +36,15 @@ class AuthenticationControllerTest {
     @Test
     void should_get_token_after_registering_user() throws Exception {
         //Given
-        var request = RegisterUserRequest.builder().login("testlogin").personalId("57040433312")
-                .password("TestPassword20@").email("test@mail.com").firstName("name").lastName("lastname").build();
+        var request = RegisterUserRequest.builder()
+                .login("testlogin")
+                .personalId("57040433312")
+                .password("TestPassword20@")
+                .email("test@mail.com")
+                .firstName("name")
+                .lastName("lastname")
+                .phoneNumber("777777777")
+                .build();
         var jsonRequest = new ObjectMapper().writeValueAsString(request);
         var response = new AuthenticationResponse("token");
         var jsonResponse = new ObjectMapper().writeValueAsString(response);

@@ -59,7 +59,7 @@ class DiagnosticResultFacadeTest {
     }
 
     @Test
-    void should_create_DiagnosticResult() throws InvalidPeselException {
+    void should_create_DiagnosticResult() {
         //Given
         var resultRequest = DiagnosticResultRequest.builder().status(DiagnosticStatus.AWAITING_RESULT).registration(LocalDateTime.now()).userLogin("test").type(DiagnosticType.BLOOD).resultsPdf(new byte[]{}).build();
         var result = DiagnosticResult.builder().build();

@@ -25,7 +25,7 @@ class DiagnosticResultService {
         return diagnosticResults.getResultsPdf();
     }
 
-    DiagnosticResult saveDiagnosticResult(DiagnosticResult result, String login) throws InvalidPeselException {
+    DiagnosticResult saveDiagnosticResult(DiagnosticResult result, String login) {
         var retrievedUser = userService.getUserByLogin(login);
         result.setUser(retrievedUser);
         retrievedUser.getResultsList().add(result);

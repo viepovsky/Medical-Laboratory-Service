@@ -28,7 +28,7 @@ class DiagnosticResultFacade {
         return diagnosticResultService.getDiagnosticResultPdfByIdAndUserLogin(id, login);
     }
 
-    DiagnosticResultResponse createDiagnosticResult(DiagnosticResultRequest request) throws InvalidPeselException {
+    DiagnosticResultResponse createDiagnosticResult(DiagnosticResultRequest request) {
         LOGGER.info("Create diagnostic result for user login:{}", request.getUserLogin());
         var toSave = mapper.mapToDiagnosticResult(request);
         var savedResult = diagnosticResultService.saveDiagnosticResult(toSave, request.getUserLogin());

@@ -37,7 +37,7 @@ class UserController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    ResponseEntity<CreatedUserResponse> createUser(@RequestBody @Valid RegisterUserRequest request) throws InvalidPeselException {
+    ResponseEntity<CreatedUserResponse> createUser(@RequestBody @Valid RegisterUserRequest request) {
         var result = userFacade.createUser(request);
         return ResponseEntity.created(URI.create("/medical/users?login=" + result.getLogin())).body(result);
     }

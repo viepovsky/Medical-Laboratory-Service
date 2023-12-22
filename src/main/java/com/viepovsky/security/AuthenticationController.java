@@ -22,7 +22,7 @@ class AuthenticationController {
     private final AuthenticationService service;
 
     @PostMapping("/register")
-    ResponseEntity<AuthenticationResponse> register(@RequestBody @Valid RegisterUserRequest request) throws InvalidPeselException {
+    ResponseEntity<AuthenticationResponse> register(@RequestBody @Valid RegisterUserRequest request) {
         return ResponseEntity.ok(service.register(request));
     }
 

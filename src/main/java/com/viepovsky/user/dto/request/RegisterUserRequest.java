@@ -29,5 +29,6 @@ public class RegisterUserRequest {
     @NotBlank(message = "Last name must not be empty")
     private String lastName;
 
+    @NotBlank(message = "Phone number must not be empty")
     private String phoneNumber;
 }

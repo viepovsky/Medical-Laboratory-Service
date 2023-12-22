@@ -20,7 +20,7 @@ class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    AuthenticationResponse register(RegisterUserRequest request) throws InvalidPeselException {
+    AuthenticationResponse register(RegisterUserRequest request) {
         var user = User.builder()
                 .login(request.getLogin())
                 .personalId(request.getPersonalId())

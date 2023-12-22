@@ -48,7 +48,7 @@ class DiagnosticResultServiceTest {
     }
 
     @Test
-    void should_save_DiagnosticResult() throws InvalidPeselException {
+    void should_save_DiagnosticResult() {
         //Given
         var result = DiagnosticResult.builder().type(DiagnosticType.BLOOD).build();
         var user = new User();

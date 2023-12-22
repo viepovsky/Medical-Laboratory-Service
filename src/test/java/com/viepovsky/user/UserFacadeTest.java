@@ -46,7 +46,7 @@ class UserFacadeTest {
     }
 
     @Test
-    void should_create_user() throws InvalidPeselException {
+    void should_create_user() {
         //Given
         var userRequest = new RegisterUserRequest();
         var user = new User();

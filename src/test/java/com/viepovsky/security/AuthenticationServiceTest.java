@@ -38,7 +38,7 @@ class AuthenticationServiceTest {
     private AuthenticationManager authenticationManager;
 
     @Test
-    void should_return_authentication_response_when_user_is_registered() throws InvalidPeselException {
+    void should_return_authentication_response_when_user_is_registered() {
         //Given
         var request = RegisterUserRequest.builder().login("testlogin").personalId("57040433312")
                 .password("TestPassword20@").email("test@mail.com").firstName("name").lastName("lastname").build();

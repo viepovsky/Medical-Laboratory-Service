@@ -48,7 +48,7 @@ class DiagnosticResultController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    ResponseEntity<DiagnosticResultResponse> createDiagnosticResult(@RequestBody @Valid DiagnosticResultRequest request) throws InvalidPeselException {
+    ResponseEntity<DiagnosticResultResponse> createDiagnosticResult(@RequestBody @Valid DiagnosticResultRequest request) {
         var result = diagnosticResultFacade.createDiagnosticResult(request);
         return ResponseEntity.created(URI.create("/medical/results?login=" + request.getUserLogin())).body(result);
     }

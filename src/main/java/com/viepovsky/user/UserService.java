@@ -19,23 +19,23 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException("User with login: " + login + " does not exist in database."));
     }
 
-    public User createUser(User user) throws InvalidPeselException {
-        PeselValidator.assertIsValid(user.getPersonalId());
+    public User createUser(User user) {
+        PeselValidator.assertIsPeselValid(user.getPersonalId());
         if (userRepository.existsByLogin(user.getLogin())) {
             throw new EntityExistsException("User with login: " + user.getLogin() + " already exists in database.");
         }
         return userRepository.save(user);
     }
 
-    public void updateUser(User user) throws InvalidPeselException {
-        PeselValidator.assertIsValid(user.getPersonalId());
+    public void updateUser(User user) {
+        PeselValidator.assertIsPeselValid(user.getPersonalId());
         var retrievedUser = userRepository.findByLogin(user.getLogin())
                 .orElseThrow(() -> new EntityNotFoundException("User with login: " + user.getLogin() + " does not exist in database."));
         retrievedUser.updateFrom(user);
         userRepository.save(retrievedUser);
     }
 
-    void updateUserWithPassword(User user) throws PasswordValidationException, InvalidPeselException {
+    void updateUserWithPassword(User user) throws PasswordValidationException {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         if (user.getPassword().matches("(?=.*[a-z])(?=.*[A-Z])(?=.*[\\W])(?=\\S+$).{8,}")) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));

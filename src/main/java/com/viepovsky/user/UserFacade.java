@@ -26,7 +26,7 @@ class UserFacade {
         return mapper.mapToDetailsUserResponse(retrievedUser);
     }
 
-    CreatedUserResponse createUser(RegisterUserRequest request) throws InvalidPeselException {
+    CreatedUserResponse createUser(RegisterUserRequest request) {
         LOGGER.info("Create user endpoint used with login:{}", request.getLogin());
         var toSave = mapper.mapToUser(request);
         var savedUser = userService.createUser(toSave);

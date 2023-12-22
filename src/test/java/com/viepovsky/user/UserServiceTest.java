@@ -52,7 +52,7 @@ class UserServiceTest {
     }
 
     @Test
-    void should_create_user() throws InvalidPeselException {
+    void should_create_user() {
         //Given
         var user = User.builder().login("testLogin").password("testPassword").personalId("92082683499").role(Role.ROLE_USER).build();
         when(repository.existsByLogin(anyString())).thenReturn(false);
@@ -76,7 +76,7 @@ class UserServiceTest {
     }
 
     @Test
-    void should_update_user() throws InvalidPeselException {
+    void should_update_user() {
         //Given
         var user = User.builder().id(5L).login("testLogin").password("testPassword").personalId("92082683499").role(Role.ROLE_USER).build();
         when(repository.findByLogin(anyString())).thenReturn(Optional.of(user));

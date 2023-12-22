@@ -112,12 +112,25 @@ class UserControllerTest {
     @Test
     void should_create_user() throws Exception {
         //Given
-        var adminInDb = User.builder().login("testAdmin").role(Role.ROLE_ADMIN).build();
+        var adminInDb = User.builder()
+                .login("testAdmin")
+                .role(Role.ROLE_ADMIN)
+                .build();
         var jwtToken = generateToken("testAdmin", secretKey);
-        var userRequest = RegisterUserRequest.builder().login("testLogin").personalId("98062267819").password("testPassword22@")
-                .email("email@email.com").firstName("test").lastName("testlast").build();
+        var userRequest = RegisterUserRequest.builder()
+                .login("testLogin")
+                .personalId("98062267819")
+                .password("testPassword22@")
+                .email("email@email.com")
+                .firstName("test")
+                .lastName("testlast")
+                .phoneNumber("777777777")
+                .build();
         var jsonRequest = new ObjectMapper().writeValueAsString(userRequest);
-        var userResponse = CreatedUserResponse.builder().login("testLogin").id(5L).build();
+        var userResponse = CreatedUserResponse.builder()
+                .login("testLogin")
+                .id(5L)
+                .build();
         var jsonResponse = new ObjectMapper().writeValueAsString(userResponse);
 
         when(userDetailsService.loadUserByUsername(anyString())).thenReturn(adminInDb);
@@ -155,10 +168,20 @@ class UserControllerTest {
     @Test
     void should_not_create_user_if_token_is_from_user_with_UserRole() throws Exception {
         //Given
-        var userInDb = User.builder().login("testUser").role(Role.ROLE_USER).build();
+        var userInDb = User.builder()
+                .login("testUser")
+                .role(Role.ROLE_USER)
+                .build();
         var jwtToken = generateToken("testUser", secretKey);
-        var userRequest = RegisterUserRequest.builder().login("testLogin").personalId("98062267819").password("testPassword22@")
-                .email("email@email.com").firstName("test").lastName("testlast").build();
+        var userRequest = RegisterUserRequest.builder()
+                .login("testLogin")
+                .personalId("98062267819")
+                .password("testPassword22@")
+                .email("email@email.com")
+                .firstName("test")
+                .lastName("testlast")
+                .phoneNumber("777777777")
+                .build();
         var jsonRequest = new ObjectMapper().writeValueAsString(userRequest);
 
         when(userDetailsService.loadUserByUsername(anyString())).thenReturn(userInDb);
